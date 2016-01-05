@@ -6,4 +6,7 @@ package com.hack.xapp.util;
 public class Util {
 
     public static String MAIN_ACTIVITY = "main_activity";
+    public static String EVENT_REGISTER_MAID = "register_maid";
+    public static String EVENT_USER_LOGIN = "login";
+
 }

@@ -25,4 +25,8 @@ public class ServiceItem {
         serviceList.add(svc);
     }
 
+    public static boolean supportsService(String svc) {
+        return serviceList.contains(svc);
+    }
+
 }

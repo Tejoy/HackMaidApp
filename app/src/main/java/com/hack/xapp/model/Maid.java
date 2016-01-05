@@ -1,5 +1,7 @@
 package com.hack.xapp.model;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,11 @@ public class Maid {
     public int salaryTo;
     List<TimeInterval> times;
     List<String> services;
+    boolean isAvailable;
+    Bitmap photo;
+    String idNum;
+    String idType;
+
 
 
     public Maid(long id, String name, String phone, int salFrom, int salTo) {

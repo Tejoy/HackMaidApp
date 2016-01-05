@@ -143,6 +143,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
         }
 
+        public void onError(String msg) {
+
+        }
+
     }
 
     ;

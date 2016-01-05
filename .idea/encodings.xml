@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/libs/asmack-android-8-4.0.4.jar" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/libs/dnsjava-2.1.2.jar" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/lib/jxmpp-core-0.4.1.jar" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/lib/jxmpp-util-cache-0.4.1.jar" charset="windows-1252" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
