@@ -2,13 +2,19 @@ package com.hack.xapp.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -20,6 +26,7 @@ import com.hack.xapp.adapter.MaidsListAdapter;
 import com.hack.xapp.fragment.NavigationDrawerFragment;
 import com.hack.xapp.fragment.dummy.DummyContent;
 import com.hack.xapp.model.Maid;
+import com.hack.xapp.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +35,26 @@ import java.util.Observer;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.OnFragmentInteractionListener {
 
+    private static final String TAG = "MainActivity";
     TextView tv;
     MaidsListAdapter rvAdapter;
     RecyclerView rv;
     DrawerLayout myDrawer;
     RelativeLayout rightDrawer;
     ListView leftDrawer;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maids_list_view);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.left_drawer);
+        actionBar.setHomeButtonEnabled(true);
+
         tv = (TextView) findViewById(R.id.no_maids_message);
         rv = (RecyclerView) findViewById(R.id.maids_list_fragment);
         myDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
@@ -47,9 +62,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         leftDrawer = (ListView) findViewById(R.id.left_drawer);
 
         List<String> leftitems = new ArrayList<String>();
-        leftitems.add("Login");
-        leftitems.add("History");
-        leftitems.add("Settings");
+        leftitems.add(Util.LEFT_DRAWER_MAIN_LOGIN);
+        leftitems.add(Util.LEFT_DRAWER_MAIN_REGISTER);
+        leftitems.add(Util.LEFT_DRAWER_MAIN_SETTINGS);
+        leftitems.add(Util.LEFT_DRAWER_MAIN_HISTORY);
+        leftitems.add(Util.LEFT_DRAWER_MAIN_UNREGISTER);
+
+        leftDrawer.setOnItemClickListener(new LeftDrawerClickListner());
 
  /*       List<String> rightitems = new ArrayList<String>();
         rightitems.add("Ravi");
@@ -71,6 +90,43 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         rv.setLayoutManager(llm);
         rvAdapter = new MaidsListAdapter(getBaseContext(), DummyContent.MAID_ITEMS);
         rv.setAdapter(rvAdapter);
+
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                    /* host Activity */
+                myDrawer,                    /* DrawerLayout object */
+                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
+                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                /*if (!isAdded()) {
+                    return;
+                }*/
+
+                supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                /*if (!isAdded()) {
+                    return;
+                }*/
+
+              /*  if (!mUserLearnedDrawer) {
+                    // The user manually opened the drawer; store this flag to prevent auto-showing
+                    // the navigation drawer automatically in the future.
+                    mUserLearnedDrawer = true;
+                    SharedPreferences sp = PreferenceManager
+                            .getDefaultSharedPreferences(getActivity());
+                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
+                }*/
+
+                supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+        };
+
     }
 
     @Override
@@ -114,12 +170,31 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        Log.i(TAG, "lalala " + id);
+
+        //Log.i(TAG,"lalala tt "+android.R.id.homeAsUp);
+
+        Log.i(TAG, "lalala hh " + android.R.id.home);
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_filter) {
             if (myDrawer.isDrawerOpen(rightDrawer)) {
                 myDrawer.closeDrawer(rightDrawer);
             } else {
                 myDrawer.openDrawer(rightDrawer);
+                if (myDrawer.isDrawerOpen(leftDrawer)) {
+                    myDrawer.closeDrawer(leftDrawer);
+                }
+            }
+            return true;
+        } else if (id == android.R.id.home) {
+            if (myDrawer.isDrawerOpen(leftDrawer)) {
+                myDrawer.closeDrawer(leftDrawer);
+            } else {
+                myDrawer.openDrawer(leftDrawer);
+                if (myDrawer.isDrawerOpen(rightDrawer)) {
+                    myDrawer.closeDrawer(rightDrawer);
+                }
             }
             return true;
         }
@@ -150,6 +225,49 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     ;
+
+    public class LeftDrawerClickListner implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.i(TAG, "onItemClick " + position);
+            Intent a;
+            switch (position) {
+                case 1:
+                    //Login case
+                   /* a = new Intent(getBaseContext(), Login.class);
+                    startActivity(a);*/
+                    break;
+
+                case 2:
+                    //Register case
+                    /* a = new Intent(getBaseContext(), Login.class);
+                    startActivity(a);*/
+                    break;
+                case 3:
+                    //Settings case
+                    /* Intent a = new Intent(getBaseContext(), Login.class);
+                    startActivity(a);*/
+                    //History case
+                    a = new Intent(getBaseContext(), History.class);
+                    startActivity(a);
+
+                    break;
+
+                case 4:
+                    //History case
+                    a = new Intent(getBaseContext(), History.class);
+                    startActivity(a);
+                    break;
+                case 5:
+                    //Unregister case
+                    /*a = new Intent(getBaseContext(), History.class);
+                    startActivity(a);*/
+                    break;
+
+            }
+        }
+    }
 
 
 }

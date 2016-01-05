@@ -112,10 +112,8 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        categories.add("Yearly");
-        categories.add("Monthly");
-        categories.add("Weekly");
-        categories.add("5days");
+        categories.add("Parttime");
+        categories.add("Fulltime");
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_spinner_item, categories);

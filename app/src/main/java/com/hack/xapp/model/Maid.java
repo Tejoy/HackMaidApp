@@ -13,12 +13,12 @@ public class Maid {
     public String phone;
     public int salaryFrom;
     public int salaryTo;
-    List<TimeInterval> times;
-    List<String> services;
-    boolean isAvailable;
-    Bitmap photo;
-    String idNum;
-    String idType;
+    public List<TimeInterval> times;
+    public List<String> services;
+    public boolean isAvailable;
+    public Bitmap photo;
+    public String idNum;
+    public String idType;
 
 
 

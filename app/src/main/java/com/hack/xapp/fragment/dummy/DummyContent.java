@@ -1,6 +1,9 @@
 package com.hack.xapp.fragment.dummy;
 
+import com.hack.xapp.model.BookedItem;
 import com.hack.xapp.model.Maid;
+import com.hack.xapp.model.ServiceItem;
+import com.hack.xapp.model.TimeInterval;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,25 +13,34 @@ public class DummyContent {
 
     public static List<Maid> MAID_ITEMS = new ArrayList<Maid>();
 
+    public static List<BookedItem> BOOKED_HISTORY_ITEMS = new ArrayList<BookedItem>();
+
     static {
         // Add 3 sample items.
-        addMaid(new Maid("Kamalabai", "1200-1800", 1500, 2000));
-        addMaid(new Maid("Mariamma", "1200-1800", 1000, 1200));
-/*        addMaid(new Maid("Kamalabai", "1200-1800", "2222222222"));
-        addMaid(new Maid("Mariamma", "2000-3000", "3333333333"));
-        addMaid(new Maid("Sridevi", "400-450", "4444444444"));
-        addMaid(new Maid("Agabai", "1000-1500", "4444444444"));
-        addMaid(new Maid("Chintu", "800-950", "4444444444"));
-        addMaid(new Maid("Ramu", "1000-1200", "4444444444"));
-        addMaid(new Maid("Deepa", "2000-2500", "4444444444"));
-        addMaid(new Maid("Chiku", "800-1100", "4444444444"));
-        addMaid(new Maid("Minu", "4000-4500", "4444444444"));
-        addMaid(new Maid("Pappu", "500-900", "4444444444"));
-        addMaid(new Maid("Dimpu", "1100-1700", "4444444444"));*/
+        Maid m1 = new Maid("Kamalabai", "1200-1800", 1500, 2000);
+        m1.addService(ServiceItem.cleaning);
+        m1.addService(ServiceItem.cook);
+        addMaid(m1);
+        Maid m2 = new Maid("Mariamma", "1200-1800", 1000, 1200);
+        m2.addService(ServiceItem.childcare);
+        m2.addService(ServiceItem.elderlycare);
+        m2.addService(ServiceItem.cook);
+        m2.addService(ServiceItem.cleaning);
+        m2.addService(ServiceItem.wash);
+        addMaid(m2);
+
+        addHistory(new BookedItem(m1, null, new TimeInterval("7:00", "8:00"), 1400, "Feb", 30));
+        addHistory(new BookedItem(m2, null, new TimeInterval("9:00", "10:00"), 1800, "April", 60));
+
     }
 
     private static void addMaid(Maid item) {
         MAID_ITEMS.add(item);
+
+    }
+
+    private static void addHistory(BookedItem item) {
+        BOOKED_HISTORY_ITEMS.add(item);
 
     }
 }
