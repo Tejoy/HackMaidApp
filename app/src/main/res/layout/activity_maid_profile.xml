@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="6dp"
+    android:layout_marginLeft="6dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_maid_name"
+        android:layout_marginTop="5dp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textStyle="bold"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/maid_name"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/title_maid_name"
+        android:text="Helloooo" />
+
+    <TextView
+        android:id="@+id/title_maid_gender"
+        android:layout_marginTop="5dp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_below="@id/title_maid_name"
+        android:textSize="18dp"
+        android:text="Gender" />
+
+    <TextView
+        android:id="@+id/maid_gender"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_maid_name"
+        android:layout_toRightOf="@id/title_maid_gender"
+        android:text="Hellooo" />
+
+    <TextView
+        android:id="@+id/title_maid_services"
+        android:layout_marginTop="5dp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_maid_gender"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:text="Services" />
+
+    <TextView
+        android:id="@+id/maid_services"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_maid_gender"
+        android:layout_toRightOf="@id/title_maid_services"
+        android:text="Cooking|Dishes" />
+
+    <TextView
+        android:id="@+id/title_maid_timing"
+        android:layout_width="80dp"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_maid_services"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:text="Timing" />
+
+    <TextView
+        android:id="@+id/maid_timing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_below="@id/title_maid_services"
+        android:layout_toRightOf="@id/title_maid_timing"
+        android:text="7:00 a.m. to 5:00 p.m." />
+
+    <TextView
+        android:id="@+id/title_maid_duration"
+        android:layout_width="80dp"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_maid_timing"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:text="Duration" />
+
+    <TextView
+        android:id="@+id/maid_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_below="@id/title_maid_timing"
+        android:layout_toRightOf="@id/title_maid_duration"
+
+        android:text="Monthly" />
+
+    <Button
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:layout_below="@id/title_maid_duration"
+        android:text="Check availability" />
+
+</RelativeLayout>

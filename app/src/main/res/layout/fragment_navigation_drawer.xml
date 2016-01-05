@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_maid_gender"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:text="Gender"
+        android:textColor="@color/black" />
+
+    <RadioGroup
+        android:id="@+id/gender_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="7dp"
+        android:layout_toRightOf="@id/title_maid_gender"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/gender_male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_toRightOf="@id/title_maid_gender"
+
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/gender_female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/gender_male"
+            android:text="Female" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/title_maid_services"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gender_radio_group"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="5dp"
+        android:text="Services"
+        android:textColor="@color/black" />
+
+    <ImageView
+        android:id="@+id/service_1"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_below="@id/gender_radio_group"
+        android:layout_marginRight="9dp"
+        android:layout_toRightOf="@id/title_maid_services"
+        android:src="@drawable/clean" />
+
+    <ImageView
+        android:id="@+id/service_2"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_below="@id/gender_radio_group"
+        android:layout_marginRight="9dp"
+        android:layout_toRightOf="@id/service_1"
+        android:src="@drawable/wash" />
+
+    <ImageView
+        android:id="@+id/service_3"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_below="@id/gender_radio_group"
+        android:layout_marginRight="9dp"
+        android:layout_toRightOf="@id/service_2"
+        android:src="@drawable/child" />
+
+    <ImageView
+        android:id="@+id/service_4"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_below="@id/gender_radio_group"
+        android:layout_marginRight="9dp"
+        android:layout_toRightOf="@id/service_3"
+        android:src="@drawable/elder" />
+
+    <ImageView
+        android:id="@+id/service_5"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_below="@id/gender_radio_group"
+        android:layout_toRightOf="@id/service_4"
+        android:src="@drawable/cook" />
+
+    <TextView
+        android:id="@+id/title_maid_timing"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_maid_services"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="13dp"
+        android:text="Timing"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/timing_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_maid_services"
+        android:layout_toRightOf="@id/title_maid_timing"
+        android:hint="FROM" />
+
+    <EditText
+        android:id="@+id/timing_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_maid_services"
+        android:layout_toRightOf="@id/timing_from"
+        android:hint="TO" />
+
+    <TextView
+        android:id="@+id/title_maid_salary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timing_from"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="13dp"
+        android:text="Services"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/salary_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timing_from"
+        android:layout_toRightOf="@id/title_maid_salary"
+        android:hint="FROM" />
+
+    <EditText
+        android:id="@+id/salary_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timing_from"
+        android:layout_toRightOf="@id/salary_from"
+        android:hint="TO" />
+
+    <TextView
+        android:id="@+id/title_work_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/salary_from"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginTop="13dp"
+        android:text="Duration"
+        android:textColor="@color/black" />
+
+    <Spinner
+        android:id="@+id/duration_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/salary_from"
+        android:layout_marginTop="9dp"
+        android:layout_toRightOf="@id/title_work_duration">
+
+    </Spinner>
+
+
+</RelativeLayout>
