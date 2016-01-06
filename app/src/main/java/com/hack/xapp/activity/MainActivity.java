@@ -24,7 +24,7 @@ import android.widget.TextView;
 import com.hack.xapp.R;
 import com.hack.xapp.adapter.MaidsListAdapter;
 import com.hack.xapp.fragment.NavigationDrawerFragment;
-import com.hack.xapp.fragment.dummy.DummyContent;
+import com.hack.xapp.util.dummy.DummyContent;
 import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
 
@@ -233,33 +233,30 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             Log.i(TAG, "onItemClick " + position);
             Intent a;
             switch (position) {
-                case 1:
+                case 0:
                     //Login case
                    /* a = new Intent(getBaseContext(), Login.class);
                     startActivity(a);*/
                     break;
 
-                case 2:
+                case 1:
                     //Register case
                     /* a = new Intent(getBaseContext(), Login.class);
                     startActivity(a);*/
                     break;
-                case 3:
+                case 2:
                     //Settings case
                     /* Intent a = new Intent(getBaseContext(), Login.class);
                     startActivity(a);*/
-                    //History case
-                    a = new Intent(getBaseContext(), History.class);
-                    startActivity(a);
 
                     break;
 
+                case 3:
+                    //Unregister case
+                    a = new Intent(getBaseContext(), History.class);
+                    startActivity(a);
+                    break;
                 case 4:
-                    //History case
-                    a = new Intent(getBaseContext(), History.class);
-                    startActivity(a);
-                    break;
-                case 5:
                     //Unregister case
                     /*a = new Intent(getBaseContext(), History.class);
                     startActivity(a);*/

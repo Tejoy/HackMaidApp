@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.hack.xapp.R;
 import com.hack.xapp.model.Maid;
 import com.hack.xapp.model.ServiceItem;
+import com.hack.xapp.util.Util;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class MaidsListAdapter extends RecyclerView.Adapter<MaidsListAdapter.RVVi
                 Intent i = new Intent();
                 i.setClassName(mContext, "com.hack.xapp.activity.MaidProfile");
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra(Util.EXTRA_MAID, maid);
                 mContext.startActivity(i);
             }
         });

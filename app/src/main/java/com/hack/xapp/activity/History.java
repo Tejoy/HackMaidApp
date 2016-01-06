@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import com.hack.xapp.R;
 import com.hack.xapp.adapter.BookedHistoryListAdapter;
-import com.hack.xapp.fragment.dummy.DummyContent;
+import com.hack.xapp.util.dummy.DummyContent;
 
 public class History extends AppCompatActivity {
 

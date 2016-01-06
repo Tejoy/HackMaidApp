@@ -1,9 +1,10 @@
-package com.hack.xapp.fragment.dummy;
+package com.hack.xapp.util.dummy;
 
 import com.hack.xapp.model.BookedItem;
 import com.hack.xapp.model.Maid;
 import com.hack.xapp.model.ServiceItem;
 import com.hack.xapp.model.TimeInterval;
+import com.hack.xapp.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,11 @@ public class DummyContent {
 
     static {
         // Add 3 sample items.
-        Maid m1 = new Maid("Kamalabai", "1200-1800", 1500, 2000);
+        Maid m1 = new Maid("Kamalabai", Util.GENDER_FEMALE, "+919999999999", 1500, 2000);
         m1.addService(ServiceItem.cleaning);
         m1.addService(ServiceItem.cook);
         addMaid(m1);
-        Maid m2 = new Maid("Mariamma", "1200-1800", 1000, 1200);
+        Maid m2 = new Maid("Mariamma", Util.GENDER_FEMALE, "+915555555555", 1000, 1200);
         m2.addService(ServiceItem.childcare);
         m2.addService(ServiceItem.elderlycare);
         m2.addService(ServiceItem.cook);

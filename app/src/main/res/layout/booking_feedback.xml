@@ -2,127 +2,126 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="6dp"
-    android:layout_marginLeft="6dp">
+    android:layout_marginLeft="6dp"
+    android:layout_marginTop="6dp">
 
     <RelativeLayout
         android:id="@+id/maid_details_layout"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/title_maid_name"
-            android:layout_marginTop="5dp"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="Name"
-            android:textStyle="bold"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/maid_name"
             android:layout_width="wrap_content"
-            android:layout_marginTop="7dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
             android:layout_toRightOf="@id/title_maid_name"
             android:text="Helloooo" />
 
-        <TextView
-            android:id="@+id/title_maid_gender"
-            android:layout_marginTop="5dp"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_below="@id/title_maid_name"
-            android:textSize="18dp"
-            android:text="Gender" />
+        <!--        <TextView
+                    android:id="@+id/title_maid_gender"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_below="@id/title_maid_name"
+                    android:textSize="18dp"
+                    android:text="Gender" />
 
-        <TextView
-            android:id="@+id/maid_gender"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="7dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title_maid_name"
-            android:layout_toRightOf="@id/title_maid_gender"
-            android:text="Hellooo" />
+                <TextView
+                    android:id="@+id/maid_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title_maid_name"
+                    android:layout_toRightOf="@id/title_maid_gender"
+                    android:text="Hellooo" />-->
 
         <TextView
             android:id="@+id/title_maid_services"
-            android:layout_marginTop="5dp"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title_maid_gender"
+            android:layout_below="@id/title_maid_name"
+            android:layout_marginTop="5dp"
+            android:text="Services"
             android:textSize="18dp"
-            android:textStyle="bold"
-            android:text="Services" />
+            android:textStyle="bold" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/maid_services"
             android:layout_width="wrap_content"
-            android:layout_marginTop="7dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title_maid_gender"
+            android:layout_below="@id/title_maid_name"
+            android:layout_marginTop="7dp"
             android:layout_toRightOf="@id/title_maid_services"
-            android:text="Cooking|Dishes" />
+            android:orientation="horizontal" />
 
         <TextView
             android:id="@+id/title_maid_timing"
             android:layout_width="80dp"
-            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/title_maid_services"
+            android:layout_marginTop="5dp"
+            android:text="Timing"
             android:textSize="18dp"
-            android:textStyle="bold"
-            android:text="Timing" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/maid_timing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
             android:layout_below="@id/title_maid_services"
+            android:layout_marginTop="7dp"
             android:layout_toRightOf="@id/title_maid_timing"
             android:text="7:00 a.m. to 5:00 p.m." />
 
-        <TextView
-            android:id="@+id/title_maid_duration"
-            android:layout_width="80dp"
-            android:layout_marginTop="5dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title_maid_timing"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            android:text="Duration" />
+        <!--        <TextView
+                    android:id="@+id/title_maid_duration"
+                    android:layout_width="80dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title_maid_timing"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:text="Duration" />
 
-        <TextView
-            android:id="@+id/maid_duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:layout_below="@id/title_maid_timing"
-            android:layout_toRightOf="@id/title_maid_duration" />
+                <TextView
+                    android:id="@+id/maid_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:layout_below="@id/title_maid_timing"
+                    android:layout_toRightOf="@id/title_maid_duration" />-->
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/button_layout"
         android:layout_width="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
         android:layout_below="@id/maid_details_layout"
-        android:layout_height="wrap_content">
+        android:layout_centerHorizontal="true">
 
         <TextView
             android:id="@+id/title_maid_phone"
             android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="Phone"
             android:textSize="24dp"
-            android:textStyle="bold"
-            android:text="Phone" />
+            android:textStyle="bold" />
 
 
         <TextView
@@ -130,35 +129,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/title_maid_phone"
+            android:text="+919999999999"
             android:textSize="24dp"
-            android:textStyle="bold"
-            android:text="+919999999999" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button_booked"
             android:layout_width="wrap_content"
 
             android:layout_height="80dp"
-            android:layout_marginTop="25dp"
             android:layout_below="@id/title_maid_phone"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:text="Booked"
             android:textSize="24dp"
-            android:textStyle="bold"
-            android:text="Booked" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button_not_booked"
             android:layout_width="wrap_content"
 
             android:layout_height="80dp"
-            android:layout_marginTop="25dp"
             android:layout_below="@id/title_maid_phone"
-            android:layout_toRightOf="@id/button_booked"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_toRightOf="@id/button_booked"
+            android:text="Not booked"
             android:textSize="24dp"
-            android:textStyle="bold"
-            android:text="Not booked" />
+            android:textStyle="bold" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/bottom_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/booking_notice" />
 
 </RelativeLayout>
