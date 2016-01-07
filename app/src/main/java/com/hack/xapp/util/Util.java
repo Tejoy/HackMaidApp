@@ -19,6 +19,9 @@ public class Util {
     public static String EVENT_BOOKING_HISTORY = "booking_history";
 
     public static String PREF_NAME = "MaidBookPref";
+    public static String PREF_LOGIN = "LoginPref";
+    public static String PREF_MAID_REGISTER = "maidRegister";
+
     public static String PREF_KEY = "isbooking";
 
     public static String FILTER_GENDER_FEMALE = "female";
