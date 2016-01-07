@@ -44,7 +44,6 @@
             android:name=".activity.ProgressScreen"
             android:label="@string/title_activity_progress_screen"
             android:theme="@style/ProgressScreenTheme"></activity>
-    
     </application>
 
 </manifest>
