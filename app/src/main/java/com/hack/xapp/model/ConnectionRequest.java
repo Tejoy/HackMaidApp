@@ -6,8 +6,26 @@ package com.hack.xapp.model;
 public class ConnectionRequest {
 
     private String URL;
+    private String key;
     private String userName;
     private String password;
+    private Location loc;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Location getLoc() {
+        return loc;
+    }
+
+    public void setLoc(Location loc) {
+        this.loc = loc;
+    }
 
     public String getUserName() {
         return userName;

@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class BookedHistoryListAdapter extends RecyclerView.Adapter<BookedHistoryListAdapter.RVViewHolder> {
 
-    private static final String TAG = "BookedHistoryListAdapter";
+    private static final String TAG = "BukedHistoryListAdapter";
 
     Context mContext;
     List<BookedItem> items;
@@ -53,8 +53,8 @@ public class BookedHistoryListAdapter extends RecyclerView.Adapter<BookedHistory
             public void onClick(View v) {
                 Intent i = new Intent();
                 i.setClassName(mContext, "com.hack.xapp.activity.MaidProfile");
-                i.putExtra(Util.FROM_HISTORY, true);
-                i.putExtra(Util.EXTRA_MAID, item.bookedMaid);
+                i.putExtra(Util.INTENT_EXTRA_FROM_HISTORY, true);
+                i.putExtra(Util.INTENT_EXTRA_MAID, item.bookedMaid);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(i);
             }

@@ -6,7 +6,12 @@
     </style>
 
     <style name="MainActivityTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
     </style>
+
+    <style name="ProgressScreenTheme" parent="Theme.AppCompat.Light">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:opacity">transparent</item>
+    </style>
+
 
 </resources>

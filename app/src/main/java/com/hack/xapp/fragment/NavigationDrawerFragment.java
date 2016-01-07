@@ -70,11 +70,14 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.i(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         Spinner spinner = (Spinner) view.findViewById(R.id.duration_spinner);
         radioGrp = (RadioGroup) view.findViewById(R.id.gender_radio_group);
@@ -82,6 +85,9 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
         timeTo = (EditText) view.findViewById(R.id.timing_to);
         salaryFrom = (EditText) view.findViewById(R.id.salary_from);
         salaryTo = (EditText) view.findViewById(R.id.salary_to);
+
+        Log.i(TAG, "radio grp child 0 id " + radioGrp.getChildAt(0).getId());
+        radioGrp.check(radioGrp.getChildAt(0).getId());
 
         LinearLayout servicesLayout = (LinearLayout) view.findViewById(R.id.maid_services);
 
@@ -153,8 +159,28 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.i(TAG, "onViewCreated");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop");
+
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        Log.i(TAG, "onAttach");
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -171,12 +197,10 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
         Log.i(TAG, "onPause radio button id " + idd);
         Log.i(TAG, "onPause radio button one " + R.id.gender_female);
         Log.i(TAG, "onPause radio button one " + R.id.gender_male);
-
-        //FilterData.getInstance().timeFrom = ;
-        //FilterData.getInstance().timeTo = ;
-
-        String salFrom = salaryFrom.getText().toString();
-        String salTo = salaryTo.getText().toString();
+        String salf = salaryFrom.getText().toString().trim();
+        String salt = salaryTo.getText().toString().trim();
+        long salFrom = salf.length() > 0 ? Long.valueOf(salf) : 0;
+        long salTo = salt.length() > 0 ? Long.valueOf(salt) : 2000;
         FilterData.getInstance().salaryFrom = salFrom;
         FilterData.getInstance().salaryTo = salTo;
 
@@ -185,6 +209,7 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
 
     @Override
     public void onDetach() {
+        Log.i(TAG, "onDetach");
         super.onDetach();
         mListener = null;
     }

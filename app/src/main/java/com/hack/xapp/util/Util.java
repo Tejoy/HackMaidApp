@@ -1,6 +1,7 @@
 package com.hack.xapp.util;
 
 import com.hack.xapp.model.FilterData;
+import com.hack.xapp.model.Location;
 
 import java.util.Date;
 
@@ -9,26 +10,32 @@ import java.util.Date;
  */
 public class Util {
 
-
-    public static String MAIN_ACTIVITY = "main_activity";
-    public static String EVENT_REGISTER_MAID = "register_maid";
     public static String EVENT_USER_LOGIN = "login";
+    public static String EVENT_AUTH = "auth";
+    public static String EVENT_MAID_LIST = "main_activity";
+    public static String EVENT_REGISTER_MAID = "register_maid";
+    public static String EVENT_REGISTER_USER = "register_user";
+    public static String EVENT_BOOK_MAID = "book_maid";
+    public static String EVENT_BOOKING_HISTORY = "booking_history";
+
     public static String PREF_NAME = "MaidBookPref";
     public static String PREF_KEY = "isbooking";
-    public static String FROM_HISTORY = "from_history";
 
-    public static String GENDER_FEMALE = "female";
-    public static String GENDER_MALE = "male";
+    public static String FILTER_GENDER_FEMALE = "female";
+    public static String FILTER_GENDER_MALE = "male";
 
-    public static final String EXTRA_MAID = "maid";
+    public static final String INTENT_EXTRA_MAID = "maid";
+    public static String INTENT_EXTRA_FROM_HISTORY = "from_history";
 
     public static String LEFT_DRAWER_MAIN_SETTINGS = "Settings";
     public static String LEFT_DRAWER_MAIN_LOGIN = "Login";
     public static String LEFT_DRAWER_MAIN_HISTORY = "History";
     public static String LEFT_DRAWER_MAIN_REGISTER = "Register";
     public static String LEFT_DRAWER_MAIN_UNREGISTER = "Unregister";
+    public static String LEFT_DRAWER_MAIN_LOCATION = "Location";
 
-    private static FilterData mFilterData = null;
+    public static FilterData mFilterData = null;
+    public static Location currentSearchLoc = null;
 
 
     public static Date getDate(String str) {

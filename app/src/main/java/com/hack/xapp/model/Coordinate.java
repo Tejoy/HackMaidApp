@@ -5,10 +5,10 @@ package com.hack.xapp.model;
  */
 public class Coordinate {
 
-    public int x;
-    public int y;
+    public double x;
+    public double y;
 
-    public Coordinate(int cx, int cy) {
+    public Coordinate(double cx, double cy) {
         x = cx;
         y = cy;
     }

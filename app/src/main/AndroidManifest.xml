@@ -31,7 +31,11 @@
         <activity
             android:name=".activity.History"
             android:label="@string/title_activity_history"
-            android:theme="@style/MainActivityTheme"></activity>
+            android:theme="@style/MainActivityTheme" />
+        <activity
+            android:name=".activity.ProgressScreen"
+            android:label="@string/title_activity_progress_screen"
+            android:theme="@style/ProgressScreenTheme"></activity>
     </application>
 
 </manifest>

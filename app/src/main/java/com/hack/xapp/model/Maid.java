@@ -14,8 +14,8 @@ public class Maid implements Parcelable {
     public String name;
     public String gender;
     public String phone;
-    public int salaryFrom;
-    public int salaryTo;
+    public long salaryFrom;
+    public long salaryTo;
     public List<TimeInterval> times;
     public List<String> services;
     public boolean isAvailable;
@@ -35,7 +35,7 @@ public class Maid implements Parcelable {
         this.isPartTime = isPartTime;
     }
 
-    public Maid(long id, String name, String gender, String phone, int salFrom, int salTo) {
+    public Maid(long id, String name, String gender, String phone, long salFrom, long salTo) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -55,7 +55,7 @@ public class Maid implements Parcelable {
         times.add(new TimeInterval(frm, to));
     }
 
-    public Maid(String name, String gender, String phone, int salFrom, int salTo) {
+    public Maid(String name, String gender, String phone, long salFrom, long salTo) {
         this.name = name;
         this.gender = gender;
         this.phone = phone;
@@ -77,8 +77,8 @@ public class Maid implements Parcelable {
         dest.writeString(name);
         dest.writeString(gender);
         dest.writeString(phone);
-        dest.writeInt(salaryFrom);
-        dest.writeInt(salaryTo);
+        dest.writeLong(salaryFrom);
+        dest.writeLong(salaryTo);
         dest.writeInt(isPartTime ? 1 : 0);
         int timesSize = times.size();
         dest.writeInt(timesSize);
@@ -113,8 +113,8 @@ public class Maid implements Parcelable {
         name = in.readString();
         gender = in.readString();
         phone = in.readString();
-        salaryFrom = in.readInt();
-        salaryTo = in.readInt();
+        salaryFrom = in.readLong();
+        salaryTo = in.readLong();
 
         int tmp = in.readInt();
 

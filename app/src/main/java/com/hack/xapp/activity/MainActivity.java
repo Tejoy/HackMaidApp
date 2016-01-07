@@ -24,9 +24,10 @@ import android.widget.TextView;
 import com.hack.xapp.R;
 import com.hack.xapp.adapter.MaidsListAdapter;
 import com.hack.xapp.fragment.NavigationDrawerFragment;
-import com.hack.xapp.util.dummy.DummyContent;
+import com.hack.xapp.model.FilterData;
 import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
+import com.hack.xapp.util.dummy.DummyContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     RelativeLayout rightDrawer;
     ListView leftDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
+    private static SearchView searchView;
+    private static MenuItem searchMenuItem;
+
 
     String LEFT_DRAWER_TAG = "left";
     String RIGHT_DRAWER_TAG = "right";
@@ -50,6 +54,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i(TAG, "onCreate ");
         setContentView(R.layout.maids_list_view);
 
         ActionBar actionBar = getSupportActionBar();
@@ -70,19 +76,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         leftitems.add(Util.LEFT_DRAWER_MAIN_SETTINGS);
         leftitems.add(Util.LEFT_DRAWER_MAIN_HISTORY);
         leftitems.add(Util.LEFT_DRAWER_MAIN_UNREGISTER);
+        leftitems.add(Util.LEFT_DRAWER_MAIN_LOCATION);
 
         leftDrawer.setOnItemClickListener(new LeftDrawerClickListner());
-
- /*       List<String> rightitems = new ArrayList<String>();
-        rightitems.add("Ravi");
-        rightitems.add("Tejo");
-        rightitems.add("Rajjo");
-
-        ArrayAdapter rightadpater = new ArrayAdapter(getBaseContext(), android.R.layout.simple_list_item_1,rightitems);
-
-        rightDrawer.setAdapter(rightadpater);*/
-
-        //populateRightDrawer();
 
         ArrayAdapter leftadpater = new ArrayAdapter(getBaseContext(), android.R.layout.simple_list_item_1, leftitems);
 
@@ -94,9 +90,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getBaseContext());
         rv.setLayoutManager(llm);
+        //TODO: fetch and pass maid list items, test below
         rvAdapter = new MaidsListAdapter(getBaseContext(), DummyContent.MAID_ITEMS);
+        //rvAdapter = new MaidsListAdapter(getBaseContext(), new ArrayList<Maid>());
         rv.setAdapter(rvAdapter);
-
+        //new ConnectionClient().getMaidsList(MainActivity.this,new MainResponseObserver(), Util.EVENT_MAID_LIST, Util.currentSearchLoc);
+        Log.i(TAG, "made request for list ");
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                    /* host Activity */
                 myDrawer,                    /* DrawerLayout object */
@@ -109,7 +108,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 String tag = drawerView.getTag().toString();
                 Log.i(TAG, "onDrawerClosed " + tag);
                 supportInvalidateOptionsMenu();
-
+                if (tag == RIGHT_DRAWER_TAG) {
+                    boolean hasChanged = (Util.mFilterData == null || Util.mFilterData.hasChanged(FilterData.getInstance()));
+                    if (hasChanged) {
+                        Util.mFilterData = FilterData.getInstance();
+                        //TODO: filter has changed, hence update the list view items
+                        ((MaidsListAdapter.CustomFilter) rvAdapter.getFilter()).filteringWithData();
+                        rv.scrollToPosition(0);
+                    }
+                }
 
             }
 
@@ -119,6 +126,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 String tag = drawerView.getTag().toString();
                 Log.i(TAG, "onDrawerOpened " + tag);
 
+                if (tag == RIGHT_DRAWER_TAG) {
+                    FilterData.resetInstance();
+                }
+
                 supportInvalidateOptionsMenu();
             }
         };
@@ -127,14 +138,23 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     }
 
+    public static SearchView getSearchView() {
+        return searchView;
+    }
+
+    public static MenuItem getSearchMenuItem() {
+        return searchMenuItem;
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchMenuItem = menu.findItem(R.id.action_search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
 
@@ -144,6 +164,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 // this is your adapter that will be filtered
                 //dataAdapter.getFilter().filter(newText);
                 Log.i(TAG, "on text chnge text: " + newText);
+
+
+                rvAdapter.getFilter().filter(newText);
+                rv.scrollToPosition(0);
+
                 return true;
             }
 
@@ -167,12 +192,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        Log.i(TAG, "lalala " + id);
-
-        //Log.i(TAG,"lalala tt "+android.R.id.homeAsUp);
-
-        Log.i(TAG, "lalala hh " + android.R.id.home);
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_filter) {
@@ -211,9 +230,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
         }
 
-
         public void maidsList(List<Maid> list) {
-
+            rvAdapter = new MaidsListAdapter(getBaseContext(), list);
+            rv.setAdapter(rvAdapter);
         }
 
         public void onError(String msg) {

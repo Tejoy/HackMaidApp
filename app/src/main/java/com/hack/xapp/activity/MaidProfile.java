@@ -25,7 +25,7 @@ import com.hack.xapp.util.Util;
 public class MaidProfile extends Activity {
 
     Button checkavail;
-    AlertDialog mDialog;
+    private static AlertDialog mDialog;
     private Maid mMaid = null;
     Context mContext;
     ImageView photo;
@@ -53,7 +53,7 @@ public class MaidProfile extends Activity {
         if (intent == null) {
             finish();
         }
-        mMaid = intent.getParcelableExtra(Util.EXTRA_MAID);
+        mMaid = intent.getParcelableExtra(Util.INTENT_EXTRA_MAID);
         if (mMaid == null) {
             finish();
         }
@@ -97,6 +97,7 @@ public class MaidProfile extends Activity {
         phone.setText(mMaid.phone);
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(60, 60, 0, 0, 0);
+
 
         View serviceView;
         for (String st : mMaid.services) {
@@ -154,7 +155,7 @@ public class MaidProfile extends Activity {
         boolean from_history = false;
         Intent i = getIntent();
         if (i != null) {
-            from_history = i.getBooleanExtra(Util.FROM_HISTORY, false);
+            from_history = i.getBooleanExtra(Util.INTENT_EXTRA_FROM_HISTORY, false);
         }
 
         if (from_history) {
@@ -177,5 +178,14 @@ public class MaidProfile extends Activity {
         if (res) {
             showBookDialog();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+            mDialog = null;
+        }
+        super.onDestroy();
     }
 }
