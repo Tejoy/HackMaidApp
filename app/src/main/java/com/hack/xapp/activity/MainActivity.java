@@ -44,6 +44,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     ListView leftDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    String LEFT_DRAWER_TAG = "left";
+    String RIGHT_DRAWER_TAG = "right";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +88,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
         leftDrawer.setAdapter(leftadpater);
 
+        leftDrawer.setTag(LEFT_DRAWER_TAG);
+        rightDrawer.setTag(RIGHT_DRAWER_TAG);
+
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getBaseContext());
         rv.setLayoutManager(llm);
@@ -100,32 +106,24 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                /*if (!isAdded()) {
-                    return;
-                }*/
+                String tag = drawerView.getTag().toString();
+                Log.i(TAG, "onDrawerClosed " + tag);
+                supportInvalidateOptionsMenu();
 
-                supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                /*if (!isAdded()) {
-                    return;
-                }*/
+                String tag = drawerView.getTag().toString();
+                Log.i(TAG, "onDrawerOpened " + tag);
 
-              /*  if (!mUserLearnedDrawer) {
-                    // The user manually opened the drawer; store this flag to prevent auto-showing
-                    // the navigation drawer automatically in the future.
-                    mUserLearnedDrawer = true;
-                    SharedPreferences sp = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity());
-                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
-                }*/
-
-                supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                supportInvalidateOptionsMenu();
             }
         };
+
+        myDrawer.setDrawerListener(mDrawerToggle);
 
     }
 
@@ -145,7 +143,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             public boolean onQueryTextChange(String newText) {
                 // this is your adapter that will be filtered
                 //dataAdapter.getFilter().filter(newText);
-                System.out.println("on text chnge text: " + newText);
+                Log.i(TAG, "on text chnge text: " + newText);
                 return true;
             }
 
@@ -153,7 +151,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             public boolean onQueryTextSubmit(String query) {
                 // this is your adapter that will be filtered
                 //dataAdapter.getFilter().filter(query);
-                System.out.println("on query submit: " + query);
+                Log.i(TAG, "on query submit: " + query);
                 return true;
             }
         };

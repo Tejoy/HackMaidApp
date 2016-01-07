@@ -2,6 +2,7 @@ package com.hack.xapp.model;
 
 import com.hack.xapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,20 @@ public class ServiceItem {
     public static final String childcare = "childcare";
     public static final String elderlycare = "elderlycare";
     public static final String cook = "cook";
+
+    private static List<String> services = null;
+
+    public static List<String> getServicesList() {
+        if (services == null) {
+            services = new ArrayList<>();
+            services.add(cleaning);
+            services.add(wash);
+            services.add(childcare);
+            services.add(elderlycare);
+            services.add(cook);
+        }
+        return services;
+    }
 
     private ServiceItem() {
     }

@@ -71,14 +71,15 @@
         android:textStyle="bold"
         android:text="Services" />
 
-    <TextView
+        <LinearLayout
         android:id="@+id/maid_services"
         android:layout_width="wrap_content"
         android:layout_marginTop="7dp"
         android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
         android:layout_below="@id/title_maid_gender"
         android:layout_toRightOf="@id/title_maid_services"
-        android:text="Cooking|Dishes" />
+            android:orientation="horizontal" />
 
     <TextView
         android:id="@+id/title_maid_timing"

@@ -19,10 +19,17 @@ public class Maid implements Parcelable {
     public List<TimeInterval> times;
     public List<String> services;
     public boolean isAvailable;
+
+
+    public boolean isVerified;
     public Bitmap photo;
     public String idNum;
     public String idType;
     public boolean isPartTime;
+
+    public void setIsVerified(boolean isVerified) {
+        this.isVerified = isVerified;
+    }
 
     public void setIsPartTime(boolean isPartTime) {
         this.isPartTime = isPartTime;

@@ -25,5 +25,18 @@ public class ConnectionClient {
 
     }
 
+    public void loginRequest(Observer observer, String key, String user, String phone, String email) {
+
+        ConnectionResponseHandler.getInstance().registerObserver(key, observer);
+
+        mConnectionTask = new ConnectionTask();
+        ConnectionRequest req = new ConnectionRequest();
+
+        //set all request data
+
+        mConnectionTask.execute(req);
+
+    }
+
 
 }

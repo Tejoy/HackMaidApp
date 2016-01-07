@@ -1,5 +1,6 @@
 package com.hack.xapp.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,28 +8,37 @@ import java.util.List;
  */
 public class FilterData {
 
-    String gender;
-    String timeFrom;
-    String timeTo;
-    List<String> services;
-    boolean isPartTime;
+    public String gender;
+    public String timeFrom;
+    public String timeTo;
+    public List<String> services;
+    public boolean isPartTime;
 
-    String partTimeFrom;
-    String partTimeTo;
+    public String salaryFrom;
+    public String salaryTo;
 
-    public FilterData(String g, String tf, String tt, boolean p, List<String> svc) {
+    private static FilterData mFilterData = null;
+
+    public static FilterData getInstance() {
+        if (mFilterData == null) {
+            mFilterData = new FilterData();
+
+        }
+        return mFilterData;
+    }
+
+    private FilterData() {
+        services = new ArrayList<>();
+    }
+
+    public void setFilterData(String g, String tf, String tt, boolean p, List<String> svc, String sf, String st) {
         gender = g;
         timeFrom = tf;
         timeTo = tt;
         isPartTime = p;
         services = svc;
-
-
-    }
-
-    public void setPartTime(String ptf, String ptt) {
-        partTimeFrom = ptf;
-        partTimeTo = ptt;
+        salaryFrom = sf;
+        salaryTo = st;
     }
 
 

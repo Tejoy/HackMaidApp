@@ -1,5 +1,7 @@
 package com.hack.xapp.util;
 
+import com.hack.xapp.model.FilterData;
+
 import java.util.Date;
 
 /**
@@ -26,6 +28,8 @@ public class Util {
     public static String LEFT_DRAWER_MAIN_REGISTER = "Register";
     public static String LEFT_DRAWER_MAIN_UNREGISTER = "Unregister";
 
+    private static FilterData mFilterData = null;
+
 
     public static Date getDate(String str) {
         Date d = new Date();
@@ -44,5 +48,12 @@ public class Util {
         return (getDate(str1).compareTo(getDate(str2)) == 0);
     }
 
+    public static FilterData getFilterData() {
+        return mFilterData;
+    }
+
+    public static void setFilterData(FilterData data) {
+        mFilterData = data;
+    }
 
 }

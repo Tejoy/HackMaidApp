@@ -12,10 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hack.xapp.R;
+import com.hack.xapp.model.FilterData;
 import com.hack.xapp.model.Maid;
 import com.hack.xapp.model.ServiceItem;
 import com.hack.xapp.util.Util;
@@ -26,11 +28,25 @@ public class MaidProfile extends Activity {
     AlertDialog mDialog;
     private Maid mMaid = null;
     Context mContext;
+    ImageView photo;
+    TextView name;
+    TextView gender;
+    TextView timing;
+    TextView duration;
+    LinearLayout servicesLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maid_profile);
+        photo = (ImageView) findViewById(R.id.maid_photo);
+
+        name = (TextView) findViewById(R.id.maid_name);
+        gender = (TextView) findViewById(R.id.maid_gender);
+        timing = (TextView) findViewById(R.id.maid_timing);
+        duration = (TextView) findViewById(R.id.maid_duration);
+        servicesLayout = (LinearLayout) findViewById(R.id.maid_services);
+
         checkavail = (Button) findViewById(R.id.button_check_avail);
         mContext = getBaseContext();
         Intent intent = getIntent();
@@ -40,6 +56,20 @@ public class MaidProfile extends Activity {
         mMaid = intent.getParcelableExtra(Util.EXTRA_MAID);
         if (mMaid == null) {
             finish();
+        }
+
+        name.setText(mMaid.name);
+        gender.setText(mMaid.gender);
+        timing.setText(FilterData.getInstance().timeFrom + " - " + FilterData.getInstance().timeTo);
+        duration.setText(mMaid.isPartTime ? "Part Time" : "Full Time");
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(60, 60, 0, 0, 0);
+
+        View v;
+        for (String st : mMaid.services) {
+            v = LayoutInflater.from(mContext).inflate(R.layout.image_view_layout, null, false);
+            v.setBackground(mContext.getResources().getDrawable(ServiceItem.getServiceResource(st)));
+            servicesLayout.addView(v, params);
         }
     }
 
@@ -58,7 +88,12 @@ public class MaidProfile extends Activity {
         Button btNotBooked = (Button) v.findViewById(R.id.button_not_booked);
 
         name.setText(mMaid.name);
-        timing.setText(mMaid.phone);
+        FilterData mFilterData = Util.getFilterData();
+        if (mFilterData != null) {
+            timing.setText(mFilterData.timeFrom + " - " + mFilterData.timeTo);
+        } else {
+            timing.setText("-");
+        }
         phone.setText(mMaid.phone);
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(60, 60, 0, 0, 0);

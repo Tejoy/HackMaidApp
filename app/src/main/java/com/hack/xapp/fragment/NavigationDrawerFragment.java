@@ -3,17 +3,25 @@ package com.hack.xapp.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hack.xapp.R;
+import com.hack.xapp.model.FilterData;
+import com.hack.xapp.model.ServiceItem;
+import com.hack.xapp.model.TagObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +37,18 @@ import java.util.List;
  */
 public class NavigationDrawerFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private final String TAG = "NavigationDrawerFrag";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG_SELECTED = "selected";
+    private static final String TAG_UNSELECTED = "unselected";
+    private static final int TAG_SERVICE_KEY = 1;
+
+    RadioGroup radioGrp;
+    EditText timeFrom;
+    EditText timeTo;
+    EditText salaryFrom;
+    EditText salaryTo;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -45,63 +57,76 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
      */
     private AbsListView mListView;
 
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
     public static NavigationDrawerFragment newInstance(String param1, String param2) {
         NavigationDrawerFragment fragment = new NavigationDrawerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public NavigationDrawerFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-       /* // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);*/
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-
-       /* // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);*/
-
-        // Spinner element
         Spinner spinner = (Spinner) view.findViewById(R.id.duration_spinner);
+        radioGrp = (RadioGroup) view.findViewById(R.id.gender_radio_group);
+        timeFrom = (EditText) view.findViewById(R.id.timing_from);
+        timeTo = (EditText) view.findViewById(R.id.timing_to);
+        salaryFrom = (EditText) view.findViewById(R.id.salary_from);
+        salaryTo = (EditText) view.findViewById(R.id.salary_to);
 
-        // Spinner click listener
+        LinearLayout servicesLayout = (LinearLayout) view.findViewById(R.id.maid_services);
+
+        List<String> serviceList = ServiceItem.getServicesList();
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(80, 80, 0, 0, 0);
+        View v;
+        for (String s : serviceList) {
+            v = LayoutInflater.from(getActivity()).inflate(R.layout.image_view_layout, null, false);
+            final LinearLayout imageLayout = (LinearLayout) v.findViewById(R.id.image_layout);
+            ImageView img = (ImageView) v.findViewById(R.id.image_view);
+            img.setImageResource(ServiceItem.getServiceResource(s));
+            v.setTag(new TagObject(s, TAG_UNSELECTED));
+            imageLayout.setBackgroundColor(getResources().getColor(R.color.red));
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TagObject tag = (TagObject) v.getTag();
+                    Log.i(TAG, "onDrawerClosed " + tag.selection);
+                    Log.i(TAG, "onDrawerClosed " + tag.serviceName);
+                    if (tag.selection == TAG_SELECTED) {
+                        tag.selection = TAG_UNSELECTED;
+                        v.setTag(tag);
+                        imageLayout.setBackgroundColor(getResources().getColor(R.color.red));
+                        FilterData.getInstance().services.remove(tag.serviceName);
+                    } else {
+                        tag.selection = TAG_SELECTED;
+                        v.setTag(tag);
+                        imageLayout.setBackgroundColor(getResources().getColor(R.color.green));
+                        FilterData.getInstance().services.add(tag.serviceName);
+                    }
+                }
+            });
+            servicesLayout.addView(v, params);
+        }
+
+
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                if (position == 0) {
+                    FilterData.getInstance().isPartTime = true;
+                } else {
+                    FilterData.getInstance().isPartTime = false;
+                }
             }
 
             @Override
@@ -136,6 +161,26 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onPause() {
+        Log.i(TAG, "onPause called ");
+
+        int idd = radioGrp.getCheckedRadioButtonId();
+        Log.i(TAG, "onPause radio button id " + idd);
+        Log.i(TAG, "onPause radio button one " + R.id.gender_female);
+        Log.i(TAG, "onPause radio button one " + R.id.gender_male);
+
+        //FilterData.getInstance().timeFrom = ;
+        //FilterData.getInstance().timeTo = ;
+
+        String salFrom = salaryFrom.getText().toString();
+        String salTo = salaryTo.getText().toString();
+        FilterData.getInstance().salaryFrom = salFrom;
+        FilterData.getInstance().salaryTo = salTo;
+
+        super.onPause();
     }
 
     @Override
