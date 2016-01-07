@@ -14,6 +14,9 @@ public class Util {
     public static String EVENT_REGISTER_MAID = "register_maid";
     public static String EVENT_USER_LOGIN = "login";
     public static String PREF_NAME = "MaidBookPref";
+    public static String PREF_LOGIN = "LoginPref";
+    public static String PREF_MAID_REGISTER = "maidRegister";
+
     public static String PREF_KEY = "isbooking";
     public static String FROM_HISTORY = "from_history";
 

@@ -233,14 +233,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             switch (position) {
                 case 0:
                     //Login case
-                   /* a = new Intent(getBaseContext(), Login.class);
-                    startActivity(a);*/
+                    a = new Intent(getBaseContext(), Login.class);
+                    startActivity(a);
                     break;
 
                 case 1:
                     //Register case
-                    /* a = new Intent(getBaseContext(), Login.class);
-                    startActivity(a);*/
+                    a = new Intent(getBaseContext(), RegisterMaid.class);
+                    startActivity(a);
                     break;
                 case 2:
                     //Settings case

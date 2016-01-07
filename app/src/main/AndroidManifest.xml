@@ -32,6 +32,15 @@
             android:name=".activity.History"
             android:label="@string/title_activity_history"
             android:theme="@style/MainActivityTheme"></activity>
+        <activity
+            android:name=".activity.Login"
+            android:label="@string/title_activity_login"
+            android:theme="@style/MainActivityTheme"></activity>
+        <activity
+            android:name=".activity.RegisterMaid"
+            android:label="Register maid"
+            android:theme="@style/MainActivityTheme"></activity>
+
     </application>
 
 </manifest>
