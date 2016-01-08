@@ -3,6 +3,9 @@ package com.hack.xapp.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -20,7 +23,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.hack.xapp.R;
 import com.hack.xapp.adapter.MaidsListAdapter;
 import com.hack.xapp.fragment.NavigationDrawerFragment;
@@ -29,6 +35,8 @@ import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
 import com.hack.xapp.util.dummy.DummyContent;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -50,10 +58,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     String LEFT_DRAWER_TAG = "left";
     String RIGHT_DRAWER_TAG = "right";
+    int PLACE_PICKER_REQUEST = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         Log.i(TAG, "onCreate ");
         setContentView(R.layout.maids_list_view);
@@ -135,7 +146,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         };
 
         myDrawer.setDrawerListener(mDrawerToggle);
-
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+        } catch (Exception e) {
+        }
     }
 
     public static SearchView getSearchView() {
@@ -241,8 +256,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     }
 
-    ;
-
     public class LeftDrawerClickListner implements AdapterView.OnItemClickListener {
 
         @Override
@@ -283,5 +296,40 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch (requestCode) {
+
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    Place place = PlacePicker.getPlace(imageReturnedIntent, this);
+                    String toastMsg = String.format("Place: %s", place.getName());
+                    Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                }
+        }
+
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

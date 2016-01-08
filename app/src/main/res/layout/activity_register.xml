@@ -2,16 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="6dp"
     android:layout_marginLeft="6dp"
+    android:layout_marginTop="6dp"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="6dp"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
         android:orientation="vertical">
 
         <ImageView
@@ -19,62 +19,77 @@
             android:layout_width="140dp"
             android:layout_height="140dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:src="@drawable/person" />
 
         <EditText
             android:id="@+id/title_maid_name"
-            android:layout_marginTop="5dp"
-            android:layout_centerHorizontal="true"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/maid_photo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
             android:hint="Name" />
 
         <EditText
             android:id="@+id/title_maid_age"
-            android:layout_marginTop="5dp"
-            android:layout_centerHorizontal="true"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/title_maid_name"
-            android:hint="age" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:hint="Phone Number" />
 
         <EditText
             android:id="@+id/title_maid_gender"
-            android:layout_marginTop="5dp"
-            android:layout_centerHorizontal="true"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/title_maid_age"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
             android:hint="Gender" />
 
         <Button
             android:id="@+id/title_maid_services"
-            android:layout_marginTop="5dp"
-            android:layout_centerHorizontal="true"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/title_maid_gender"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
             android:text="Choose a Service" />
 
-        <Button
-            android:id="@+id/title_maid_timing"
-            android:layout_width="150dp"
-            android:layout_marginTop="5dp"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/title_maid_timing_lin"
+            android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
             android:layout_below="@id/title_maid_services"
-            android:text="Choose Timing" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/title_maid_timingFrom"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="From Time" />
+
+            <Button
+                android:id="@+id/title_maid_timingTo"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+
+                android:text="To Time" />
+        </LinearLayout>
 
         <Spinner
             android:id="@+id/title_maid_duration"
             android:layout_width="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title_maid_timing"
+            android:layout_below="@id/title_maid_timing_lin"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             android:entries="@array/Duration" />
 
         <Button
