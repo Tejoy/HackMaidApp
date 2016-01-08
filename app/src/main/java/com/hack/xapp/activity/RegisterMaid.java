@@ -1,6 +1,7 @@
 package com.hack.xapp.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -9,8 +10,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +23,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.hack.xapp.R;
+import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
 
 import java.io.FileNotFoundException;
@@ -29,9 +37,12 @@ import java.io.InputStream;
 public class RegisterMaid extends Activity {
 
     Button checkavail;
+    AlertDialog mDialog;
+    private Maid mMaid = null;
     EditText mName;
     EditText mPhoneNumber;
     EditText mGender;
+    EditText mPhone;
     Button mService;
     Button mTimingFrom;
     Button mTimingTo;
