@@ -44,6 +44,7 @@
         <EditText
             android:id="@+id/title_maid_gender"
             android:layout_width="180dp"
+
             android:layout_height="wrap_content"
             android:layout_below="@id/title_maid_age"
             android:layout_centerHorizontal="true"
