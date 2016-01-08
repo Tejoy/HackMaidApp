@@ -29,10 +29,10 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
 
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".activity.MaidProfile"
@@ -45,7 +45,12 @@
         <activity
             android:name=".activity.Login"
             android:label="@string/title_activity_login"
-            android:theme="@style/MainActivityTheme"></activity>
+            android:theme="@style/MainActivityTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.RegisterMaid"
             android:label="Register maid"

@@ -22,6 +22,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.hack.xapp.R;
@@ -30,7 +35,8 @@ import com.hack.xapp.fragment.NavigationDrawerFragment;
 import com.hack.xapp.model.FilterData;
 import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
-import com.hack.xapp.util.dummy.DummyContent;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,11 +103,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         LinearLayoutManager llm = new LinearLayoutManager(getBaseContext());
         rv.setLayoutManager(llm);
         //TODO: fetch and pass maid list items, test below
-        rvAdapter = new MaidsListAdapter(getBaseContext(), DummyContent.MAID_ITEMS);
-        //rvAdapter = new MaidsListAdapter(getBaseContext(), new ArrayList<Maid>());
+        //rvAdapter = new MaidsListAdapter(getBaseContext(), DummyContent.MAID_ITEMS);
+        rvAdapter = new MaidsListAdapter(getBaseContext(), new ArrayList<Maid>());
         rv.setAdapter(rvAdapter);
-        //new ConnectionClient().getMaidsList(MainActivity.this,new MainResponseObserver(), Util.EVENT_MAID_LIST, Util.currentSearchLoc);
+
         Log.i(TAG, "made request for list ");
+
+        makeServerRequest();
+
+
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                    /* host Activity */
                 myDrawer,                    /* DrawerLayout object */
@@ -146,6 +156,32 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
         } catch (Exception e) {
         }
+    }
+
+    private void makeServerRequest() {
+
+        RequestQueue queue = Volley.newRequestQueue(getBaseContext());
+        JsonArrayRequest jsArrayRequest = new JsonArrayRequest(Util.ServerURL + Util.EVENT_MAID_LIST, new Response.Listener<JSONArray>() {
+
+            @Override
+            public void onResponse(JSONArray response) {
+                // TODO Auto-generated method stub
+                Log.i(TAG, "Response => " + response.toString());
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "onErrorResponse ");
+                error.printStackTrace();
+
+            }
+        });
+
+        queue.add(jsArrayRequest);
+
+
     }
 
     public static SearchView getSearchView() {

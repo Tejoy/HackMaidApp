@@ -40,6 +40,8 @@ public class Util {
     public static FilterData mFilterData = null;
     public static Location currentSearchLoc = null;
 
+    public static String ServerURL = "http://192.168.1.11:8888/MaidService/";
+
 
     public static Date getDate(String str) {
         Date d = new Date();
