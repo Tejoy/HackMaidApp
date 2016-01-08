@@ -163,7 +163,7 @@ public class RegisterMaid extends Activity {
 
                 SharedPreferences pref = getSharedPreferences(Util.PREF_MAID_REGISTER, MODE_PRIVATE);
                 Maid maid = new Maid(mName.getText().toString(), mGender.getText().toString(), mPhoneNumber.getText().toString(), mService.getText().toString(), mTimingFrom.getText().toString() + "-" + mTimingTo.getText().toString(), mDuration.getSelectedItem().toString(), mPhoto.getDrawable());
-                //loc;
+
                 // pref.edit().putStringSet().commit();
                 SharedPreferences.Editor prefsEditor = pref.edit();
                 //String json = gson.toJson(myObject); // myObject - instance of MyObject
@@ -207,6 +207,11 @@ public class RegisterMaid extends Activity {
                     // set current time into textview
                     mTimingFrom.setText(new StringBuilder().append(pad(hour))
                             .append(":").append(pad(minute)));
+
+                    // set current time into timepicker
+                    //timePicker1.setCurrentHour(hour);
+                    //timePicker1.setCurrentMinute(minute);
+
                 }
             };
 
@@ -220,6 +225,11 @@ public class RegisterMaid extends Activity {
                     // set current time into textview
                     mTimingTo.setText(new StringBuilder().append(pad(hour))
                             .append(":").append(pad(minute)));
+
+                    // set current time into timepicker
+                    //timePicker1.setCurrentHour(hour);
+                    //timePicker1.setCurrentMinute(minute);
+
                 }
             };
 
@@ -254,6 +264,10 @@ public class RegisterMaid extends Activity {
 
     }
 
+    /*        if (res) {
+                showBookDialog();
+            }*/
+    //}
     public class Maid {
         String vName;
         int vAge;
