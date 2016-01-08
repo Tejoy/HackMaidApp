@@ -37,6 +37,9 @@ public class Util {
     public static String LEFT_DRAWER_MAIN_UNREGISTER = "Unregister";
     public static String LEFT_DRAWER_MAIN_LOCATION = "Location";
 
+    public static String MAID_ATTR_ISPART_TIME = "Part time";
+    public static String MAID_ATTR_FULL_TIME = "Full time";
+
     public static FilterData mFilterData = null;
     public static Location currentSearchLoc = null;
 

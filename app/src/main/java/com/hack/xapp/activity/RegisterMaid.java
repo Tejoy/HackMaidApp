@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,13 +20,25 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.hack.xapp.R;
+import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
+
+import org.json.JSONArray;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegisterMaid extends Activity {
+
+    public String TAG = "RegisterMaid";
 
     Button checkavail;
     EditText mName;
@@ -63,10 +75,6 @@ public class RegisterMaid extends Activity {
         if (intent == null) {
             finish();
         }
-        /*mMaid = intent.getParcelableExtra(Util.EXTRA_MAID);
-        if (mMaid == null) {
-            finish();
-        }*/
     }
 
     @Override
@@ -87,14 +95,6 @@ public class RegisterMaid extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-       /* SharedPreferences pref = getSharedPreferences(Util.PREF_NAME, MODE_PRIVATE);
-        boolean res = pref.getBoolean(Util.PREF_KEY, false);
-        boolean from_history = false;
-        Intent i = getIntent();
-        if (i != null) {
-            from_history = i.getBooleanExtra(Util.FROM_HISTORY, false);
-        }*/
 
         mPhoto.setOnClickListener(new View.OnClickListener() {
 
@@ -130,22 +130,55 @@ public class RegisterMaid extends Activity {
             @Override
             public void onClick(View v) {
 
-                SharedPreferences pref = getSharedPreferences(Util.PREF_MAID_REGISTER, MODE_PRIVATE);
-                Maid maid = new Maid(mName.getText().toString(), mGender.getText().toString(), mPhoneNumber.getText().toString(), mService.getText().toString(), mTimingFrom.getText().toString() + "-" + mTimingTo.getText().toString(), mDuration.getSelectedItem().toString(), mPhoto.getDrawable());
+                //TODO : populate service list
+                List<String> services = new ArrayList<String>();
 
-                // pref.edit().putStringSet().commit();
+                //add each service to Maid object one by one like maid.add(serviceString)
+
+                SharedPreferences pref = getSharedPreferences(Util.PREF_MAID_REGISTER, MODE_PRIVATE);
+                //TODO: pass the salary input
+                Maid maid = new Maid(mName.getText().toString(), mGender.getText().toString(), mPhoneNumber.getText().toString(), 0, 0);
+
+                //TODO : set the photo below as Bitmap
+                maid.setIsPartTime(mDuration.getSelectedItem().toString().equals(Util.MAID_ATTR_ISPART_TIME) ? true : false);
+                maid.setPhoto(null);
+
                 SharedPreferences.Editor prefsEditor = pref.edit();
-                //String json = gson.toJson(myObject); // myObject - instance of MyObject
                 prefsEditor.putString(Util.PREF_MAID_REGISTER, maid.toString());
                 prefsEditor.commit();
-                /*prefsEditor.putString("mName", mName.getText().toString());
-                prefsEditor.putLong("mPhone", Long.parseLong(mPhone.getText().toString()));
-                prefsEditor.putString("mEmailId", mEmailId.getText().toString());
-                prefsEditor.apply();*/
 
-                //showBookDialog();
+
+                makeServerRequest();
+
             }
         });
+
+    }
+
+    private void makeServerRequest() {
+
+        RequestQueue queue = Volley.newRequestQueue(getBaseContext());
+        JsonArrayRequest jsArrayRequest = new JsonArrayRequest(Util.ServerURL + Util.EVENT_REGISTER_MAID, new Response.Listener<JSONArray>() {
+
+            @Override
+            public void onResponse(JSONArray response) {
+                // TODO Auto-generated method stub
+                Log.i(TAG, "Response => " + response.toString());
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "onErrorResponse ");
+                error.printStackTrace();
+
+            }
+        });
+
+
+        queue.add(jsArrayRequest);
+
 
     }
 
@@ -221,33 +254,6 @@ public class RegisterMaid extends Activity {
                 }
         }
 
-    }
-
-
-    /*        if (res) {
-                showBookDialog();
-            }*/
-    //}
-    public class Maid {
-        String vName;
-        int vAge;
-        String vGender;
-        String vPhone;
-        String vService;
-        String vTiming;
-        String vDuration;
-        Drawable vPhoto;
-
-        public Maid(String vName, String vGender, String vPhone, String vService, String vTiming, String vDuration, Drawable vPhoto) {
-            this.vName = vName;
-            this.vAge = vAge;
-            this.vGender = vGender;
-            this.vPhone = vPhone;
-            this.vService = vService;
-            this.vTiming = vTiming;
-            this.vDuration = vDuration;
-            this.vPhoto = vPhoto;
-        }
     }
 
     private static String pad(int c) {

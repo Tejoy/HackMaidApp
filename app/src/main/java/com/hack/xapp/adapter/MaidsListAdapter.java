@@ -167,7 +167,13 @@ public class MaidsListAdapter extends RecyclerView.Adapter<MaidsListAdapter.RVVi
             if (mFilterData != null) {
                 List<Maid> maidList = new ArrayList<Maid>();
                 for (Maid m : items) {
-                    //TODO: filter the data
+                    if (!mFilterData.gender.equals(m.gender)) {
+                        continue;
+                    }
+
+
+
+
                 }
                 results.count = maidList.size();
                 results.values = maidList;

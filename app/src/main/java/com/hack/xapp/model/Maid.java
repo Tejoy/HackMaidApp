@@ -11,14 +11,15 @@ public class Maid implements Parcelable {
 
 
     public long id;
-    public String name;
-    public String gender;
-    public String phone;
-    public long salaryFrom;
-    public long salaryTo;
-    public List<TimeInterval> times;
-    public List<String> services;
+    public String name; //compulsary
+    public String gender; //compulsary
+    public String phone; //compulsary
+    public long salaryFrom; //compulsary
+    public long salaryTo; //compulsary
+    public List<TimeInterval> times; //compulsary
+    public List<String> services; //compulsary
     public boolean isAvailable;
+    public Location loc; // compulsary
 
 
     public boolean isVerified;
@@ -26,6 +27,14 @@ public class Maid implements Parcelable {
     public String idNum;
     public String idType;
     public boolean isPartTime;
+
+    public void setLoc(Location loc) {
+        this.loc = loc;
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.photo = photo;
+    }
 
     public void setIsVerified(boolean isVerified) {
         this.isVerified = isVerified;
@@ -41,7 +50,7 @@ public class Maid implements Parcelable {
         this.gender = gender;
         this.phone = phone;
         this.salaryFrom = salFrom;
-        salaryTo = salTo;
+        this.salaryTo = salTo;
         times = new ArrayList<TimeInterval>();
         services = new ArrayList<String>();
         isPartTime = false;
@@ -80,6 +89,10 @@ public class Maid implements Parcelable {
         dest.writeLong(salaryFrom);
         dest.writeLong(salaryTo);
         dest.writeInt(isPartTime ? 1 : 0);
+        dest.writeDouble(loc.radius);
+        dest.writeString(loc.name);
+        dest.writeDouble(loc.center.x);
+        dest.writeDouble(loc.center.x);
         int timesSize = times.size();
         dest.writeInt(timesSize);
 
@@ -119,6 +132,12 @@ public class Maid implements Parcelable {
         int tmp = in.readInt();
 
         isPartTime = (tmp == 0 ? false : true);
+        double r = in.readDouble();
+        String n = in.readString();
+        double x = in.readDouble();
+        double y = in.readDouble();
+        loc = new Location(r, x, y);
+        loc.setName(n);
 
         int timesSize = in.readInt();
         times = new ArrayList<TimeInterval>();

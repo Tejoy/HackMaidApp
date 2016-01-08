@@ -5,12 +5,12 @@ package com.hack.xapp.model;
  */
 public class Location {
 
-    int radius;
-    String name;
-    String pincode;
-    Coordinate center;
+    public double radius;
+    public String name;
+    public String pincode;
+    public Coordinate center;
 
-    public Location(int r, int x, int y) {
+    public Location(double r, double x, double y) {
         center = new Coordinate(x, y);
         radius = r;
     }

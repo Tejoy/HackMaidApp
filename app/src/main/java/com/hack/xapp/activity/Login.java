@@ -22,6 +22,7 @@ import com.hack.xapp.R;
 import com.hack.xapp.model.UserObject;
 import com.hack.xapp.util.Util;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Login extends Activity {
@@ -81,12 +82,28 @@ public class Login extends Activity {
                 prefsEditor.commit();
 
                 RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-                JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, Util.ServerURL + Util.EVENT_USER_LOGIN, null, new Response.Listener<JSONObject>() {
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("name", user.name);
+                    jsonObject.put("email", user.email);
+                    jsonObject.put("mob", user.mob);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, Util.ServerURL + Util.EVENT_USER_LOGIN, jsonObject, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         // TODO Auto-generated method stub
                         Log.i(TAG, "Response => " + response.toString());
+                        //if success
+                        if (true) {
+                            Intent intent = new Intent();
+                            intent.setClassName(getBaseContext(), MainActivity.class.getName());
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
 
                     }
                 }, new Response.ErrorListener() {
