@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import java.io.InputStream;
 public class RegisterMaid extends Activity {
 
     Button checkavail;
+    Button chooseLoc;
     AlertDialog mDialog;
     private Maid mMaid = null;
     EditText mName;
@@ -46,6 +48,8 @@ public class RegisterMaid extends Activity {
     Button mService;
     Button mTimingFrom;
     Button mTimingTo;
+    EditText mSalaryFrom;
+    EditText mSalaryTo;
     Spinner mDuration;
     ImageView mPhoto;
     Context mContext;
@@ -54,6 +58,7 @@ public class RegisterMaid extends Activity {
     int PLACE_PICKER_REQUEST = 2;
     private int hour;
     private int minute;
+    String loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +71,13 @@ public class RegisterMaid extends Activity {
         mService = (Button) this.findViewById(R.id.title_maid_services);
         mTimingFrom = (Button) this.findViewById(R.id.title_maid_timingFrom);
         mTimingTo = (Button) this.findViewById(R.id.title_maid_timingTo);
+        mSalaryFrom = (EditText) this.findViewById(R.id.title_maid_SalaryFrom);
+        mSalaryTo = (EditText) this.findViewById(R.id.title_maid_salaryTo);
         mDuration = (Spinner) this.findViewById(R.id.title_maid_duration);
         checkavail = (Button) findViewById(R.id.button_check_avail);
+        chooseLoc = (Button) findViewById(R.id.button_choose_location);
+
+
         //showBookDialog();
         mContext = getBaseContext();
         Intent intent = getIntent();
@@ -136,14 +146,24 @@ public class RegisterMaid extends Activity {
                 showDialog(TIME_DIALOG_TO);
             }
         });
+        chooseLoc.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(RegisterMaid.this), PLACE_PICKER_REQUEST);
+                } catch (Exception e) {
+                }
+            }
+        });
         checkavail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 SharedPreferences pref = getSharedPreferences(Util.PREF_MAID_REGISTER, MODE_PRIVATE);
                 Maid maid = new Maid(mName.getText().toString(), mGender.getText().toString(), mPhoneNumber.getText().toString(), mService.getText().toString(), mTimingFrom.getText().toString() + "-" + mTimingTo.getText().toString(), mDuration.getSelectedItem().toString(), mPhoto.getDrawable());
-
+                //loc;
                 // pref.edit().putStringSet().commit();
                 SharedPreferences.Editor prefsEditor = pref.edit();
                 //String json = gson.toJson(myObject); // myObject - instance of MyObject
@@ -187,11 +207,6 @@ public class RegisterMaid extends Activity {
                     // set current time into textview
                     mTimingFrom.setText(new StringBuilder().append(pad(hour))
                             .append(":").append(pad(minute)));
-
-                    // set current time into timepicker
-                    //timePicker1.setCurrentHour(hour);
-                    //timePicker1.setCurrentMinute(minute);
-
                 }
             };
 
@@ -205,11 +220,6 @@ public class RegisterMaid extends Activity {
                     // set current time into textview
                     mTimingTo.setText(new StringBuilder().append(pad(hour))
                             .append(":").append(pad(minute)));
-
-                    // set current time into timepicker
-                    //timePicker1.setCurrentHour(hour);
-                    //timePicker1.setCurrentMinute(minute);
-
                 }
             };
 
@@ -230,15 +240,20 @@ public class RegisterMaid extends Activity {
                     }
 
                 }
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    Place place = PlacePicker.getPlace(imageReturnedIntent, this);
+                    loc = place.getLatLng().toString();
+                    String toastMsg = String.format("Place: %s", place.getName());
+
+                    Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                }
+
         }
 
     }
 
-
-    /*        if (res) {
-                showBookDialog();
-            }*/
-    //}
     public class Maid {
         String vName;
         int vAge;
