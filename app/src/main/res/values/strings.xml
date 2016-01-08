@@ -10,7 +10,7 @@
     <string name="title_activity_history">History</string>
     <string name="title_activity_login">Login</string>
     <string-array name="Duration">
-        <item>Permanent</item>
+        <item>Full time</item>
         <item>Part time</item>
     </string-array>
     <string name="booking_notice">Kindly use the above phone number to discuss your booking. You can continue searching more once you decide to book/not book the person above.</string>
