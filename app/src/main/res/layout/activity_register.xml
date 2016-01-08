@@ -38,6 +38,7 @@
             android:layout_below="@id/title_maid_name"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
+            android:inputType="number|phone"
             android:hint="Phone Number" />
 
         <EditText
@@ -54,6 +55,7 @@
             style="@style/MyTheme"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/material_button"
             android:layout_below="@id/title_maid_gender"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
@@ -72,6 +74,7 @@
                 style="@style/MyTheme"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/material_button"
                 android:layout_marginTop="5dp"
                 android:text="From Time" />
 
@@ -79,9 +82,10 @@
                 android:id="@+id/title_maid_timingTo"
                 style="@style/MyTheme"
                 android:layout_width="150dp"
-
+                android:background="@drawable/material_button"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
 
                 android:text="To Time" />
         </LinearLayout>
@@ -116,7 +120,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/title_maid_salary_lin"
-
+            android:background="@drawable/material_button"
             android:layout_centerHorizontal="true"
             android:text="Choose Location" />
 

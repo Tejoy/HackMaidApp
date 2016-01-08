@@ -2,51 +2,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="6dp"
-    android:layout_marginLeft="6dp"
+    android:background="@color/common_signin_btn_default_background"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="6dp"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/title_user_name"
-            android:layout_marginTop="5dp"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:hint="FirstName LastName"
-            android:textSize="18dp" />
+            android:layout_marginTop="200dp"
+            android:hint="FirstName LastName" />
 
         <EditText
             android:id="@+id/user_mail_id"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="7dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:hint="example@domain.com"
-            android:layout_below="@id/title_user_name" />
+            android:layout_below="@id/title_user_name"
+            android:layout_marginTop="20dp"
+            android:hint="example@domain.com" />
 
         <EditText
             android:id="@+id/title_phone_number"
-            android:layout_marginTop="5dp"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:hint="9522000000"
+            android:layout_below="@id/user_mail_id"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/user_mail_id" />
+            android:layout_marginTop="20dp"
+            android:inputType="number|phone"
+            android:hint="9522000000" />
 
         <Button
             android:id="@+id/button_check_avail"
-            android:layout_width="wrap_content"
-
+            style="@style/MyTheme"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_below="@id/title_phone_number"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/material_button"
             android:text="Login" />
+
     </RelativeLayout>
 </RelativeLayout>
