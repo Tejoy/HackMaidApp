@@ -1,6 +1,7 @@
 package com.hack.xapp.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -8,9 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,42 +22,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.hack.xapp.R;
 import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class RegisterMaid extends Activity {
 
-    public String TAG = "RegisterMaid";
-
     Button checkavail;
+    Button chooseLoc;
+    AlertDialog mDialog;
+    private Maid mMaid = null;
     EditText mName;
     EditText mPhoneNumber;
     EditText mGender;
+    EditText mPhone;
     Button mService;
     Button mTimingFrom;
     Button mTimingTo;
+    EditText mSalaryFrom;
+    EditText mSalaryTo;
     Spinner mDuration;
     ImageView mPhoto;
     Context mContext;
@@ -62,6 +58,7 @@ public class RegisterMaid extends Activity {
     int PLACE_PICKER_REQUEST = 2;
     private int hour;
     private int minute;
+    String loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +71,23 @@ public class RegisterMaid extends Activity {
         mService = (Button) this.findViewById(R.id.title_maid_services);
         mTimingFrom = (Button) this.findViewById(R.id.title_maid_timingFrom);
         mTimingTo = (Button) this.findViewById(R.id.title_maid_timingTo);
+        mSalaryFrom = (EditText) this.findViewById(R.id.title_maid_SalaryFrom);
+        mSalaryTo = (EditText) this.findViewById(R.id.title_maid_salaryTo);
         mDuration = (Spinner) this.findViewById(R.id.title_maid_duration);
         checkavail = (Button) findViewById(R.id.button_check_avail);
+        chooseLoc = (Button) findViewById(R.id.button_choose_location);
+
+
         //showBookDialog();
         mContext = getBaseContext();
         Intent intent = getIntent();
         if (intent == null) {
             finish();
         }
+        /*mMaid = intent.getParcelableExtra(Util.EXTRA_MAID);
+        if (mMaid == null) {
+            finish();
+        }*/
     }
 
     @Override
@@ -102,6 +108,14 @@ public class RegisterMaid extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+       /* SharedPreferences pref = getSharedPreferences(Util.PREF_NAME, MODE_PRIVATE);
+        boolean res = pref.getBoolean(Util.PREF_KEY, false);
+        boolean from_history = false;
+        Intent i = getIntent();
+        if (i != null) {
+            from_history = i.getBooleanExtra(Util.FROM_HISTORY, false);
+        }*/
 
         mPhoto.setOnClickListener(new View.OnClickListener() {
 
@@ -132,70 +146,37 @@ public class RegisterMaid extends Activity {
                 showDialog(TIME_DIALOG_TO);
             }
         });
+        chooseLoc.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(RegisterMaid.this), PLACE_PICKER_REQUEST);
+                } catch (Exception e) {
+                }
+            }
+        });
         checkavail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //TODO : populate service list
-                List<String> services = new ArrayList<String>();
-
-                //add each service to Maid object one by one like maid.add(serviceString)
-
                 SharedPreferences pref = getSharedPreferences(Util.PREF_MAID_REGISTER, MODE_PRIVATE);
-                //TODO: pass the salary input
-                Maid maid = new Maid(mName.getText().toString(), mGender.getText().toString(), mPhoneNumber.getText().toString(), 0, 0);
+                Maid maid = new Maid(mName.getText().toString(), mGender.getText().toString(), mPhoneNumber.getText().toString(), mService.getText().toString(), mTimingFrom.getText().toString() + "-" + mTimingTo.getText().toString(), mDuration.getSelectedItem().toString(), mPhoto.getDrawable());
 
-                //TODO : set the photo below as Bitmap
-                maid.setIsPartTime(mDuration.getSelectedItem().toString().equals(Util.MAID_ATTR_ISPART_TIME) ? true : false);
-                maid.setPhoto(null);
-
+                // pref.edit().putStringSet().commit();
                 SharedPreferences.Editor prefsEditor = pref.edit();
+                //String json = gson.toJson(myObject); // myObject - instance of MyObject
                 prefsEditor.putString(Util.PREF_MAID_REGISTER, maid.toString());
                 prefsEditor.commit();
+                /*prefsEditor.putString("mName", mName.getText().toString());
+                prefsEditor.putLong("mPhone", Long.parseLong(mPhone.getText().toString()));
+                prefsEditor.putString("mEmailId", mEmailId.getText().toString());
+                prefsEditor.apply();*/
 
-
-                makeServerRequest(maid);
-
+                //showBookDialog();
             }
         });
-
-    }
-
-    private void makeServerRequest(Maid mMaid) {
-
-        RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-
-/*        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("name", user.name);
-            jsonObject.put("email", user.email);
-            jsonObject.put("mob", user.mob);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
-
-        MyJsonArrayRequest jsArrayRequest = new MyJsonArrayRequest(Util.ServerURL + Util.EVENT_REGISTER_MAID, new Response.Listener<JSONArray>() {
-
-            @Override
-            public void onResponse(JSONArray response) {
-                // TODO Auto-generated method stub
-                Log.i(TAG, "Response => " + response.toString());
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i(TAG, "onErrorResponse ");
-                error.printStackTrace();
-
-            }
-        }, mMaid);
-
-
-        queue.add(jsArrayRequest);
-
 
     }
 
@@ -269,8 +250,44 @@ public class RegisterMaid extends Activity {
                     }
 
                 }
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    Place place = PlacePicker.getPlace(imageReturnedIntent, this);
+                    loc = place.getLatLng().toString();
+                    String toastMsg = String.format("Place: %s", place.getName());
+
+                    Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                }
+
         }
 
+    }
+
+    /*        if (res) {
+                showBookDialog();
+            }*/
+    //}
+    public class Maid {
+        String vName;
+        int vAge;
+        String vGender;
+        String vPhone;
+        String vService;
+        String vTiming;
+        String vDuration;
+        Drawable vPhoto;
+
+        public Maid(String vName, String vGender, String vPhone, String vService, String vTiming, String vDuration, Drawable vPhoto) {
+            this.vName = vName;
+            this.vAge = vAge;
+            this.vGender = vGender;
+            this.vPhone = vPhone;
+            this.vService = vService;
+            this.vTiming = vTiming;
+            this.vDuration = vDuration;
+            this.vPhoto = vPhoto;
+        }
     }
 
     private static String pad(int c) {
@@ -278,62 +295,5 @@ public class RegisterMaid extends Activity {
             return String.valueOf(c);
         else
             return "0" + String.valueOf(c);
-    }
-
-    private class MyJsonArrayRequest extends JsonArrayRequest {
-
-        Maid mMaid = null;
-
-        /**
-         * Creates a new request.
-         *
-         * @param url           URL to fetch the JSON from
-         * @param listener      Listener to receive the JSON response
-         * @param errorListener Error listener, or null to ignore errors.
-         */
-        public MyJsonArrayRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener, Maid mMaid) {
-            super(url, listener, errorListener);
-            this.mMaid = mMaid;
-        }
-
-        @Override
-        protected Map<String, String> getParams() throws AuthFailureError {
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("name", mMaid.name);
-            params.put("phone", mMaid.phone);
-            params.put("gender", mMaid.gender);
-            params.put("salaryTo", String.valueOf(mMaid.salaryTo));
-            params.put("salaryFrom", String.valueOf(mMaid.salaryFrom));
-            params.put("isPartTime", mMaid.isPartTime ? String.valueOf(1) : String.valueOf(0));
-            params.put("isAvailable", mMaid.isAvailable ? String.valueOf(1) : String.valueOf(0));
-            params.put("idNum", mMaid.idNum);
-            params.put("idType", mMaid.idType);
-
-            return super.getParams();
-        }
-
-        @Override
-        protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
-            Log.i(TAG, "Response => " + response.toString());
-
-            JSONObject jo = new JSONObject();
-
-            try {
-                jo.put("lastName", "Doe");
-                jo.put("firstName", "John");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            JSONArray ja = new JSONArray();
-            ja.put(jo);
-            /*String jsonString = new String(response.data,
-                    HttpHeaderParser
-                            .parseCharset(response.headers));*/
-            return Response.success(ja,
-                    HttpHeaderParser
-                            .parseCacheHeaders(response));
-
-        }
     }
 }
