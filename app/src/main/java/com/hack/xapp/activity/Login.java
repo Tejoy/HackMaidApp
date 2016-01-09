@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -114,51 +113,33 @@ public class Login extends Activity {
                         public void onResponse(JSONObject response) {
                             // TODO Auto-generated method stub
                             Log.i(TAG, "Response => " + response.toString());
-                            //if success
+                            try {
+                                boolean res = response.get("status").equals("success");
 
-                            Intent intent = new Intent();
-                            intent.setClassName(getBaseContext(), MainActivity.class.getName());
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // TODO Auto-generated method stub
-                        Log.i(TAG, "Response => " + response.toString());
-                        try {
-                            boolean res = response.get("status").equals("success");
-
-                            if (res) {
-                                Intent intent = new Intent();
-                                intent.setClassName(getBaseContext(), MainActivity.class.getName());
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+                                if (res) {
+                                    Intent intent = new Intent();
+                                    intent.setClassName(getBaseContext(), MainActivity.class.getName());
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 
-
-                    }
-                }, new Response.ErrorListener() {
 
                         }
                     }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i(TAG, "onErrorResponse ");
-                        error.printStackTrace();
-                        Toast.makeText(getBaseContext(), "Failed to login. Please try again.", Toast.LENGTH_SHORT).show();
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.i(TAG, "onErrorResponse ");
                             error.printStackTrace();
+                            Toast.makeText(getBaseContext(), "Failed to login. Please try again.", Toast.LENGTH_SHORT).show();
 
                         }
                     });
 
                     queue.add(jsObjRequest);
-
                 }
             }
         });
