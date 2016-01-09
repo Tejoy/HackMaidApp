@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -70,6 +71,7 @@ public class RegisterMaid extends Activity {
     Spinner mDuration;
     ImageView mPhoto;
     Context mContext;
+    String vServices;
     static final int TIME_DIALOG_FROM = 998;
     static final int TIME_DIALOG_TO = 999;
     static final int SERVICE_PICKER = 1000;
@@ -151,6 +153,48 @@ public class RegisterMaid extends Activity {
                 // Intent photoPickerIntent = new Intent(RegisterMaid.this, TimeRangeSelector.class);
                 //startActivity(photoPickerIntent);
                 showDialog(TIME_DIALOG_TO);
+            }
+        });
+
+        mService.setOnClickListener(new View.OnClickListener() {
+            String mServices = "";
+
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(getApplicationContext(), ListDialog.class);
+                startActivityForResult(in, 5);
+
+               /* AlertDialog.Builder builder = new AlertDialog.Builder(
+                        RegisterMaid.this);
+
+                LayoutInflater inflater = RegisterMaid.this.getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.service_item, null);
+                builder.setView(dialogView);
+                builder.setTitle("Select Service");
+
+                builder.setPositiveButton("OK",
+                                new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int id)
+                                    {
+                                        vServices = mServices;
+                                        Toast.makeText(getApplicationContext(), vServices, Toast.LENGTH_LONG).show();
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                    }
+                                });
+                mDialog = builder.create();
+                *///dialog.requestWindowFeature(Window.FEATURE_LEFT_ICON);
+                //dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, ServiceItem.getServiceResource("cook"));
+
+                //mDialog.show();
             }
         });
         chooseLoc.setOnClickListener(new View.OnClickListener() {
@@ -342,6 +386,10 @@ public class RegisterMaid extends Activity {
                     String toastMsg = String.format("Place: %s", place.getName());
 
                     Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                }
+            case 5:
+                if (resultCode == Activity.RESULT_OK) {
+
                 }
         }
 

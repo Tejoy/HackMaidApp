@@ -1,0 +1,40 @@
+<RelativeLayout
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/common_signin_btn_default_background"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        ></ListView>
+
+    <Button
+        android:id="@+id/title_maid_timingTo"
+        style="@style/MyTheme"
+        android:layout_gravity="bottom"
+
+        android:layout_width="150dp"
+        android:background="@drawable/material_button"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="OK"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/title_maid_timingFrom"
+        style="@style/MyTheme"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/material_button"
+        android:text="Cancel"
+        android:layout_gravity="bottom"
+
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
