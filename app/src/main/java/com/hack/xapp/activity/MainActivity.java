@@ -22,9 +22,12 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.places.Place;
@@ -37,9 +40,13 @@ import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -349,6 +356,57 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         }
 
 
+    }
+
+    private class MyJsonArrayRequest extends JsonArrayRequest {
+
+        Maid mMaid = null;
+
+        /**
+         * Creates a new request.
+         *
+         * @param url           URL to fetch the JSON from
+         * @param listener      Listener to receive the JSON response
+         * @param errorListener Error listener, or null to ignore errors.
+         */
+        public MyJsonArrayRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener, Maid mMaid) {
+            super(url, listener, errorListener);
+            this.mMaid = mMaid;
+        }
+
+        @Override
+        protected Map<String, String> getParams() throws AuthFailureError {
+            Map<String, String> params = new HashMap<String, String>();
+
+            //TODO : pass search maid params here
+
+
+            return super.getParams();
+        }
+
+        @Override
+        protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+            Log.i(TAG, "Response => " + response.toString());
+
+            JSONObject jo = new JSONObject();
+
+            try {
+                jo.put("lastName", "Doe");
+                jo.put("firstName", "John");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JSONArray ja = new JSONArray();
+            ja.put(jo);
+            /*String jsonString = new String(response.data,
+                    HttpHeaderParser
+                            .parseCharset(response.headers));*/
+            return Response.success(ja,
+                    HttpHeaderParser
+                            .parseCacheHeaders(response));
+
+        }
     }
 }
 

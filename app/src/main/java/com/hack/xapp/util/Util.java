@@ -12,7 +12,7 @@ public class Util {
 
     public static String EVENT_USER_LOGIN = "login";
     public static String EVENT_AUTH = "auth";
-    public static String EVENT_MAID_LIST = "main_activity";
+    public static String EVENT_MAID_LIST = "search_maid";
     public static String EVENT_REGISTER_MAID = "register_maid";
     public static String EVENT_REGISTER_USER = "register_user";
     public static String EVENT_BOOK_MAID = "book_maid";
@@ -43,7 +43,7 @@ public class Util {
     public static FilterData mFilterData = null;
     public static Location currentSearchLoc = null;
 
-    public static String ServerURL = "http://192.168.1.11:8888/MaidService/";
+    public static String ServerURL = "http://10.10.21.111:8888/MaidService/";
 
 
     public static Date getDate(String str) {

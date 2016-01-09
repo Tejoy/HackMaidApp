@@ -20,9 +20,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.hack.xapp.R;
@@ -30,11 +33,15 @@ import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RegisterMaid extends Activity {
 
@@ -148,17 +155,27 @@ public class RegisterMaid extends Activity {
                 prefsEditor.commit();
 
 
-                makeServerRequest();
+                makeServerRequest(maid);
 
             }
         });
 
     }
 
-    private void makeServerRequest() {
+    private void makeServerRequest(Maid mMaid) {
 
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-        JsonArrayRequest jsArrayRequest = new JsonArrayRequest(Util.ServerURL + Util.EVENT_REGISTER_MAID, new Response.Listener<JSONArray>() {
+
+/*        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("name", user.name);
+            jsonObject.put("email", user.email);
+            jsonObject.put("mob", user.mob);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
+
+        MyJsonArrayRequest jsArrayRequest = new MyJsonArrayRequest(Util.ServerURL + Util.EVENT_REGISTER_MAID, new Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray response) {
@@ -174,7 +191,7 @@ public class RegisterMaid extends Activity {
                 error.printStackTrace();
 
             }
-        });
+        }, mMaid);
 
 
         queue.add(jsArrayRequest);
@@ -261,5 +278,62 @@ public class RegisterMaid extends Activity {
             return String.valueOf(c);
         else
             return "0" + String.valueOf(c);
+    }
+
+    private class MyJsonArrayRequest extends JsonArrayRequest {
+
+        Maid mMaid = null;
+
+        /**
+         * Creates a new request.
+         *
+         * @param url           URL to fetch the JSON from
+         * @param listener      Listener to receive the JSON response
+         * @param errorListener Error listener, or null to ignore errors.
+         */
+        public MyJsonArrayRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener, Maid mMaid) {
+            super(url, listener, errorListener);
+            this.mMaid = mMaid;
+        }
+
+        @Override
+        protected Map<String, String> getParams() throws AuthFailureError {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("name", mMaid.name);
+            params.put("phone", mMaid.phone);
+            params.put("gender", mMaid.gender);
+            params.put("salaryTo", String.valueOf(mMaid.salaryTo));
+            params.put("salaryFrom", String.valueOf(mMaid.salaryFrom));
+            params.put("isPartTime", mMaid.isPartTime ? String.valueOf(1) : String.valueOf(0));
+            params.put("isAvailable", mMaid.isAvailable ? String.valueOf(1) : String.valueOf(0));
+            params.put("idNum", mMaid.idNum);
+            params.put("idType", mMaid.idType);
+
+            return super.getParams();
+        }
+
+        @Override
+        protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+            Log.i(TAG, "Response => " + response.toString());
+
+            JSONObject jo = new JSONObject();
+
+            try {
+                jo.put("lastName", "Doe");
+                jo.put("firstName", "John");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JSONArray ja = new JSONArray();
+            ja.put(jo);
+            /*String jsonString = new String(response.data,
+                    HttpHeaderParser
+                            .parseCharset(response.headers));*/
+            return Response.success(ja,
+                    HttpHeaderParser
+                            .parseCacheHeaders(response));
+
+        }
     }
 }
