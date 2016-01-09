@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -97,13 +98,19 @@ public class Login extends Activity {
                     public void onResponse(JSONObject response) {
                         // TODO Auto-generated method stub
                         Log.i(TAG, "Response => " + response.toString());
-                        //if success
-                        if (true) {
-                            Intent intent = new Intent();
-                            intent.setClassName(getBaseContext(), MainActivity.class.getName());
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                        try {
+                            boolean res = response.get("status").equals("success");
+
+                            if (res) {
+                                Intent intent = new Intent();
+                                intent.setClassName(getBaseContext(), MainActivity.class.getName());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
 
                     }
                 }, new Response.ErrorListener() {
@@ -112,6 +119,7 @@ public class Login extends Activity {
                     public void onErrorResponse(VolleyError error) {
                         Log.i(TAG, "onErrorResponse ");
                         error.printStackTrace();
+                        Toast.makeText(getBaseContext(), "Failed to login. Please try again.", Toast.LENGTH_SHORT).show();
 
                     }
                 });

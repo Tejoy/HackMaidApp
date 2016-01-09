@@ -39,7 +39,7 @@ public class FilterData {
         timeTo = "00:00";
         isPartTime = false;
         salaryFrom = 0;
-        salaryTo = 2000;
+        salaryTo = 0;
         services = new ArrayList<>();
     }
 

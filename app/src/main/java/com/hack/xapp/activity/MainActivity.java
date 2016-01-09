@@ -38,6 +38,7 @@ import com.hack.xapp.fragment.NavigationDrawerFragment;
 import com.hack.xapp.model.FilterData;
 import com.hack.xapp.model.Maid;
 import com.hack.xapp.util.Util;
+import com.hack.xapp.util.dummy.DummyContent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,7 +63,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     private ActionBarDrawerToggle mDrawerToggle;
     private static SearchView searchView;
     private static MenuItem searchMenuItem;
-
 
     String LEFT_DRAWER_TAG = "left";
     String RIGHT_DRAWER_TAG = "right";
@@ -110,8 +110,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         LinearLayoutManager llm = new LinearLayoutManager(getBaseContext());
         rv.setLayoutManager(llm);
         //TODO: fetch and pass maid list items, test below
-        //rvAdapter = new MaidsListAdapter(getBaseContext(), DummyContent.MAID_ITEMS);
-        rvAdapter = new MaidsListAdapter(getBaseContext(), new ArrayList<Maid>());
+        rvAdapter = new MaidsListAdapter(getBaseContext(), DummyContent.MAID_ITEMS);
+        //rvAdapter = new MaidsListAdapter(getBaseContext(), new ArrayList<Maid>());
         rv.setAdapter(rvAdapter);
 
         Log.i(TAG, "made request for list ");
@@ -150,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 Log.i(TAG, "onDrawerOpened " + tag);
 
                 if (tag == RIGHT_DRAWER_TAG) {
-                    FilterData.resetInstance();
+                    //FilterData.resetInstance();
                 }
 
                 supportInvalidateOptionsMenu();
@@ -168,12 +168,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     private void makeServerRequest() {
 
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
-        JsonArrayRequest jsArrayRequest = new JsonArrayRequest(Util.ServerURL + Util.EVENT_MAID_LIST, new Response.Listener<JSONArray>() {
+        MyJsonArrayRequest jsArrayRequest = new MyJsonArrayRequest(Util.ServerURL + Util.EVENT_MAID_LIST, new Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray response) {
                 // TODO Auto-generated method stub
                 Log.i(TAG, "Response => " + response.toString());
+                // Log.i(TAG, "Response => " + response.);
+                // response.get
 
             }
         }, new Response.ErrorListener() {
@@ -360,7 +362,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     private class MyJsonArrayRequest extends JsonArrayRequest {
 
-        Maid mMaid = null;
+        FilterData mFilterData = null;
 
         /**
          * Creates a new request.
@@ -369,17 +371,38 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
          * @param listener      Listener to receive the JSON response
          * @param errorListener Error listener, or null to ignore errors.
          */
-        public MyJsonArrayRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener, Maid mMaid) {
+        public MyJsonArrayRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
             super(url, listener, errorListener);
-            this.mMaid = mMaid;
+            this.mFilterData = Util.mFilterData;
         }
 
         @Override
         protected Map<String, String> getParams() throws AuthFailureError {
             Map<String, String> params = new HashMap<String, String>();
 
-            //TODO : pass search maid params here
+            //loc passed
+            params.put("radius", String.valueOf(Util.currentSearchLoc.radius));
+            params.put("name", Util.currentSearchLoc.name);
+            params.put("pincode", Util.currentSearchLoc.pincode);
+            params.put("x", String.valueOf(Util.currentSearchLoc.center.x));
+            params.put("y", String.valueOf(Util.currentSearchLoc.center.y));
 
+
+            params.put("gender", Util.mFilterData.gender);
+            params.put("isPartTime", Util.mFilterData.isPartTime ? String.valueOf(1) : String.valueOf(0));
+
+            if (mFilterData != null) {
+
+                params.put("timeFrom", Util.mFilterData.timeFrom);
+                params.put("timeTo", Util.mFilterData.timeTo);
+                params.put("salaryFrom", String.valueOf(Util.mFilterData.salaryFrom));
+                params.put("salaryTo", String.valueOf(Util.mFilterData.salaryTo));
+                params.put("services_size", String.valueOf(Util.mFilterData.services.size()));
+
+                for (int i = 0; i < Util.mFilterData.services.size(); ++i) {
+                    params.put("service_" + i, Util.mFilterData.services.get(i));
+                }
+            }
 
             return super.getParams();
         }

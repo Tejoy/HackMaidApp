@@ -11,6 +11,7 @@
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
         android:text="Gender"
         android:textColor="@color/black" />
@@ -49,7 +50,7 @@
         android:layout_below="@id/gender_radio_group"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:text="Services"
         android:textColor="@color/black" />
 
@@ -57,54 +58,10 @@
         android:id="@+id/maid_services"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/title_maid_services"
-        android:layout_marginTop="5dp"
         android:layout_below="@id/gender_radio_group"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/title_maid_services"
         android:orientation="horizontal" />
-
-    <!--    <ImageView
-            android:id="@+id/service_1"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_below="@id/gender_radio_group"
-            android:layout_marginRight="9dp"
-            android:layout_toRightOf="@id/title_maid_services"
-            android:src="@drawable/clean" />
-
-        <ImageView
-            android:id="@+id/service_2"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_below="@id/gender_radio_group"
-            android:layout_marginRight="9dp"
-            android:layout_toRightOf="@id/service_1"
-            android:src="@drawable/wash" />
-
-        <ImageView
-            android:id="@+id/service_3"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_below="@id/gender_radio_group"
-            android:layout_marginRight="9dp"
-            android:layout_toRightOf="@id/service_2"
-            android:src="@drawable/child" />
-
-        <ImageView
-            android:id="@+id/service_4"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_below="@id/gender_radio_group"
-            android:layout_marginRight="9dp"
-            android:layout_toRightOf="@id/service_3"
-            android:src="@drawable/elder" />
-
-        <ImageView
-            android:id="@+id/service_5"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_below="@id/gender_radio_group"
-            android:layout_toRightOf="@id/service_4"
-            android:src="@drawable/cook" />-->
 
     <TextView
         android:id="@+id/title_maid_timing"
@@ -112,25 +69,50 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_maid_services"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="30dp"
         android:text="Timing"
         android:textColor="@color/black" />
 
-    <EditText
-        android:id="@+id/timing_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title_maid_services"
-        android:layout_toRightOf="@id/title_maid_timing"
-        android:hint="FROM" />
+    <!--    <EditText
+            android:id="@+id/timing_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_maid_services"
+            android:layout_toRightOf="@id/title_maid_timing"
+            android:hint="FROM" />
 
-    <EditText
-        android:id="@+id/timing_to"
-        android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/timing_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_maid_services"
+            android:layout_toRightOf="@id/timing_from"
+            android:hint="TO" />-->
+
+    <Button
+        android:id="@+id/timing_from"
+        style="@style/MyTheme"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/title_maid_services"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/title_maid_timing"
+        android:background="@drawable/material_button"
+        android:text="From" />
+
+    <Button
+        android:id="@+id/timing_to"
+        style="@style/MyTheme"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_maid_services"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="15dp"
         android:layout_toRightOf="@id/timing_from"
-        android:hint="TO" />
+        android:background="@drawable/material_button"
+
+        android:text="To" />
 
     <TextView
         android:id="@+id/title_maid_salary"
@@ -138,8 +120,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/timing_from"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginRight="29dp"
+        android:layout_marginTop="23dp"
         android:text="Salary"
         android:textColor="@color/black" />
 
@@ -148,16 +130,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/timing_from"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
         android:layout_toRightOf="@id/title_maid_salary"
-        android:hint="FROM" />
+        android:hint="FROM"
+        android:numeric="integer" />
 
     <EditText
         android:id="@+id/salary_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/timing_from"
+        android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/salary_from"
-        android:hint="TO" />
+        android:hint="TO"
+        android:numeric="integer" />
 
     <TextView
         android:id="@+id/title_work_duration"
@@ -165,20 +152,38 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/salary_from"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="13dp"
-        android:text="Duration"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="23dp"
+        android:text="Type"
         android:textColor="@color/black" />
 
-    <Spinner
-        android:id="@+id/duration_spinner"
+    <RadioGroup
+        android:id="@+id/part_time_radio_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/salary_from"
-        android:layout_marginTop="9dp"
-        android:layout_toRightOf="@id/title_work_duration">
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="17dp"
+        android:layout_toRightOf="@id/title_work_duration"
+        android:orientation="horizontal">
 
-    </Spinner>
+        <RadioButton
+            android:id="@+id/part_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_toRightOf="@id/title_maid_gender"
+
+            android:text="Part time" />
+
+        <RadioButton
+            android:id="@+id/full_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/gender_male"
+            android:text="Full time" />
+
+    </RadioGroup>
 
 
 </RelativeLayout>

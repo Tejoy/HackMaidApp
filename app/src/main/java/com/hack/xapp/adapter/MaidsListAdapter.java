@@ -170,10 +170,29 @@ public class MaidsListAdapter extends RecyclerView.Adapter<MaidsListAdapter.RVVi
                     if (!mFilterData.gender.equals(m.gender)) {
                         continue;
                     }
-
-
-
-
+                    if (mFilterData.isPartTime != m.isPartTime) {
+                        continue;
+                    }
+                    if (!mFilterData.timeFrom.equals("00:00") && !mFilterData.timeFrom.equals(m.times.get(0).timeFrom)) {
+                        continue;
+                    }
+                    if (!mFilterData.timeTo.equals("00:00") && !mFilterData.timeTo.equals(m.times.get(0).timeTo)) {
+                        continue;
+                    }
+                    if (mFilterData.salaryTo != 0 && mFilterData.salaryTo < m.salaryTo) {
+                        continue;
+                    }
+                    boolean filterout = false;
+                    for (String s : mFilterData.services) {
+                        if (!m.services.contains(s)) {
+                            filterout = true;
+                            break;
+                        }
+                    }
+                    if (filterout) {
+                        continue;
+                    }
+                    maidList.add(m);
                 }
                 results.count = maidList.size();
                 results.values = maidList;

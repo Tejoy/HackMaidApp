@@ -43,8 +43,20 @@ public class Util {
     public static FilterData mFilterData = null;
     public static Location currentSearchLoc = null;
 
+
     public static String ServerURL = "http://10.10.21.111:8888/MaidService/";
 
+    public void loadDeafultFilter() {
+        if (mFilterData == null) {
+            mFilterData = new FilterData();
+            mFilterData.gender = Util.FILTER_GENDER_MALE;
+            mFilterData.isPartTime = false;
+        }
+    }
+
+    public static void setCurrentSearchLoc(Location currentSearchLoc) {
+        Util.currentSearchLoc = currentSearchLoc;
+    }
 
     public static Date getDate(String str) {
         Date d = new Date();
@@ -52,6 +64,7 @@ public class Util {
         String mm = str.substring(str.indexOf(":") + 1);
         d.setHours(Integer.valueOf(hh));
         d.setMinutes(Integer.valueOf(mm));
+
         return d;
     }
 

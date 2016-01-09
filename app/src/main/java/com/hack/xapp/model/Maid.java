@@ -105,7 +105,8 @@ public class Maid implements Parcelable {
         for (int i = 0; i < servicesSize; ++i) {
             dest.writeString(services.get(i));
         }
-
+        //TODO: write bitmap
+        dest.writeParcelable(photo, 0);
 
     }
 
@@ -153,5 +154,7 @@ public class Maid implements Parcelable {
             services.add(in.readString());
         }
 
+        //TODO: read bitmap
+        photo = in.readParcelable(null);
     }
 }

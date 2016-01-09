@@ -5,17 +5,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,33 +19,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.hack.xapp.R;
 import com.hack.xapp.model.Maid;
-import com.hack.xapp.model.ServiceItem;
+import com.hack.xapp.model.TimeInterval;
 import com.hack.xapp.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +58,6 @@ public class RegisterMaid extends Activity {
     Button checkavail;
     Button chooseLoc;
     AlertDialog mDialog;
-    private Maid mMaid = null;
     EditText mName;
     EditText mPhoneNumber;
     EditText mGender;
@@ -80,6 +77,7 @@ public class RegisterMaid extends Activity {
     private int hour;
     private int minute;
     String loc;
+    Bitmap selectedImage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,22 +174,20 @@ public class RegisterMaid extends Activity {
                 //add each service to Maid object one by one like maid.add(serviceString)
 
                 SharedPreferences pref = getSharedPreferences(Util.PREF_MAID_REGISTER, MODE_PRIVATE);
-                //TODO: pass the salary input
-                Maid maid = new Maid(mName.getText().toString(), mGender.getText().toString(), mPhoneNumber.getText().toString(), 0, 0);
+                Maid maid = new Maid(mName.getText().toString(), mGender.getText().toString(), mPhoneNumber.getText().toString(), Long.valueOf(mSalaryFrom.getText().toString()), Long.valueOf(mSalaryTo.getText().toString()));
 
-                //TODO : set the photo below as Bitmap
                 maid.setIsPartTime(mDuration.getSelectedItem().toString().equals(Util.MAID_ATTR_ISPART_TIME) ? true : false);
-                maid.setPhoto(null);
+                maid.setPhoto(selectedImage);
+
+                String tf = mTimingFrom.getText().toString().trim();
+                String tt = mTimingTo.getText().toString().trim();
+                if (tf.length() > 0 && tt.length() > 0) {
+                    maid.times.add(new TimeInterval(tf, tt));
+                }
 
                 SharedPreferences.Editor prefsEditor = pref.edit();
-                //String json = gson.toJson(myObject); // myObject - instance of MyObject
                 prefsEditor.putString(Util.PREF_MAID_REGISTER, maid.toString());
                 prefsEditor.commit();
-                /*prefsEditor.putString("mName", mName.getText().toString());
-                prefsEditor.putLong("mPhone", Long.parseLong(mPhone.getText().toString()));
-                prefsEditor.putString("mEmailId", mEmailId.getText().toString());
-                prefsEditor.apply();*/
-
 
                 makeServerRequest(maid);
 
@@ -204,21 +200,55 @@ public class RegisterMaid extends Activity {
 
         RequestQueue queue = Volley.newRequestQueue(getBaseContext());
 
-/*        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
+        JSONArray servicesObj = new JSONArray();
+
         try {
-            jsonObject.put("name", user.name);
-            jsonObject.put("email", user.email);
-            jsonObject.put("mob", user.mob);
+            jsonObject.put("name", mMaid.name);
+            jsonObject.put("phone", mMaid.phone);
+            jsonObject.put("gender", mMaid.gender);
+            jsonObject.put("salaryTo", String.valueOf(mMaid.salaryTo));
+            jsonObject.put("salaryFrom", String.valueOf(mMaid.salaryFrom));
+            jsonObject.put("timeFrom", mMaid.times.get(0).timeFrom);
+            jsonObject.put("timeTo", mMaid.times.get(0).timeTo);
+            jsonObject.put("isPartTime", mMaid.isPartTime ? 1 : 0);
+            jsonObject.put("isAvailable", mMaid.isAvailable ? 1 : 0);
+
+            for (String s : mMaid.services) {
+                servicesObj.put(s);
+            }
+            jsonObject.put("services", servicesObj);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            mMaid.photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+            String photoBitmapString = new String(byteArray);
+            jsonObject.put("photo", photoBitmapString);
+
+            //jsonObject.put("idNum", mMaid.idNum);
+            //jsonObject.put("idType", mMaid.idType);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
-
-        MyJsonArrayRequest jsArrayRequest = new MyJsonArrayRequest(Util.ServerURL + Util.EVENT_REGISTER_MAID, new Response.Listener<JSONArray>() {
+        }
+        Log.i(TAG, Util.ServerURL + Util.EVENT_REGISTER_MAID);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, Util.ServerURL + Util.EVENT_REGISTER_MAID, jsonObject, new Response.Listener<JSONObject>() {
 
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(JSONObject response) {
                 // TODO Auto-generated method stub
                 Log.i(TAG, "Response => " + response.toString());
+                try {
+                    boolean res = response.get("status").equals("success");
+                    if (res) {
+                        Intent intent = new Intent();
+                        intent.setClassName(getBaseContext(), MainActivity.class.getName());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         }, new Response.ErrorListener() {
@@ -227,12 +257,18 @@ public class RegisterMaid extends Activity {
             public void onErrorResponse(VolleyError error) {
                 Log.i(TAG, "onErrorResponse ");
                 error.printStackTrace();
+                Toast.makeText(getBaseContext(), "Failed to login. Please try again.", Toast.LENGTH_SHORT).show();
 
             }
-        }, mMaid);
+        });
 
+        queue.add(jsObjRequest);
 
-        queue.add(jsArrayRequest);
+    }
+
+    private void makeServerRequest1(Maid mMaid) {
+
+        RequestQueue queue = Volley.newRequestQueue(getBaseContext());
 
 
     }
@@ -261,13 +297,8 @@ public class RegisterMaid extends Activity {
                     hour = selectedHour;
                     minute = selectedMinute;
 
-                    // set current time into textview
                     mTimingFrom.setText(new StringBuilder().append(pad(hour))
                             .append(":").append(pad(minute)));
-
-                    // set current time into timepicker
-                    //timePicker1.setCurrentHour(hour);
-                    //timePicker1.setCurrentMinute(minute);
 
                 }
             };
@@ -279,13 +310,9 @@ public class RegisterMaid extends Activity {
                     hour = selectedHour;
                     minute = selectedMinute;
 
-                    // set current time into textview
                     mTimingTo.setText(new StringBuilder().append(pad(hour))
                             .append(":").append(pad(minute)));
 
-                    // set current time into timepicker
-                    //timePicker1.setCurrentHour(hour);
-                    //timePicker1.setCurrentMinute(minute);
 
                 }
             };
@@ -300,7 +327,7 @@ public class RegisterMaid extends Activity {
                     try {
                         final Uri imageUri = imageReturnedIntent.getData();
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                        Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                         mPhoto.setImageBitmap(selectedImage);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -320,25 +347,17 @@ public class RegisterMaid extends Activity {
 
     }
 
-    private class MyJsonArrayRequest extends JsonArrayRequest {
+    private class MyJsonObjectRequest extends JsonObjectRequest {
 
         Maid mMaid = null;
 
-        /**
-         * Creates a new request.
-         *
-         * @param url           URL to fetch the JSON from
-         * @param listener      Listener to receive the JSON response
-         * @param errorListener Error listener, or null to ignore errors.
-         */
-        public MyJsonArrayRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener, Maid mMaid) {
-            super(url, listener, errorListener);
-            this.mMaid = mMaid;
-    }
+        public MyJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+            super(method, url, jsonRequest, listener, errorListener);
+        }
 
         @Override
         protected Map<String, String> getParams() throws AuthFailureError {
-            Map<String, String> params = new HashMap<String, String>();
+/*            Map<String, String> params = new HashMap<String, String>();
             params.put("name", mMaid.name);
             params.put("phone", mMaid.phone);
             params.put("gender", mMaid.gender);
@@ -347,16 +366,37 @@ public class RegisterMaid extends Activity {
             params.put("isPartTime", mMaid.isPartTime ? String.valueOf(1) : String.valueOf(0));
             params.put("isAvailable", mMaid.isAvailable ? String.valueOf(1) : String.valueOf(0));
             params.put("idNum", mMaid.idNum);
-            params.put("idType", mMaid.idType);
+            params.put("idType", mMaid.idType);*/
 
             return super.getParams();
         }
 
         @Override
-        protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+        protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
             Log.i(TAG, "Response => " + response.toString());
 
-            JSONObject jo = new JSONObject();
+            try {
+                String jsonString = new String(response.data,
+                        HttpHeaderParser.parseCharset(response.headers));
+                JSONObject result = null;
+
+                if (jsonString != null && jsonString.length() > 0) {
+                    result = new JSONObject(jsonString);
+                }
+
+                return Response.success(result,
+                        HttpHeaderParser.parseCacheHeaders(response));
+
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return Response.error(new ParseError(e));
+            } catch (JSONException je) {
+                je.printStackTrace();
+                return Response.error(new ParseError(je));
+            }
+
+/*            JSONObject jo = new JSONObject();
 
             try {
                 jo.put("lastName", "Doe");
@@ -367,15 +407,16 @@ public class RegisterMaid extends Activity {
 
             JSONArray ja = new JSONArray();
             ja.put(jo);
-            /*String jsonString = new String(response.data,
+            *//*String jsonString = new String(response.data,
                     HttpHeaderParser
-                            .parseCharset(response.headers));*/
-            return Response.success(ja,
+                            .parseCharset(response.headers));*//*
+            return Response.success(jo,
                     HttpHeaderParser
-                            .parseCacheHeaders(response));
+                            .parseCacheHeaders(response));*/
 
         }
     }
+
 
     private static String pad(int c) {
         if (c >= 10)

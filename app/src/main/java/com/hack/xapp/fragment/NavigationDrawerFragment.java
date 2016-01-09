@@ -2,7 +2,10 @@ package com.hack.xapp.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +13,21 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.hack.xapp.R;
 import com.hack.xapp.model.FilterData;
 import com.hack.xapp.model.ServiceItem;
 import com.hack.xapp.model.TagObject;
+import com.hack.xapp.util.Util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,9 +47,10 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
     private static final String TAG_UNSELECTED = "unselected";
     private static final int TAG_SERVICE_KEY = 1;
 
-    RadioGroup radioGrp;
-    EditText timeFrom;
-    EditText timeTo;
+    RadioGroup radioGrpGender;
+    RadioGroup radioGrpPartTime;
+    Button timeFrom;
+    Button timeTo;
     EditText salaryFrom;
     EditText salaryTo;
 
@@ -79,15 +84,108 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
 
         Log.i(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        Spinner spinner = (Spinner) view.findViewById(R.id.duration_spinner);
-        radioGrp = (RadioGroup) view.findViewById(R.id.gender_radio_group);
-        timeFrom = (EditText) view.findViewById(R.id.timing_from);
-        timeTo = (EditText) view.findViewById(R.id.timing_to);
+        radioGrpGender = (RadioGroup) view.findViewById(R.id.gender_radio_group);
+        radioGrpPartTime = (RadioGroup) view.findViewById(R.id.part_time_radio_group);
+        timeFrom = (Button) view.findViewById(R.id.timing_from);
+        timeTo = (Button) view.findViewById(R.id.timing_to);
         salaryFrom = (EditText) view.findViewById(R.id.salary_from);
         salaryTo = (EditText) view.findViewById(R.id.salary_to);
 
-        Log.i(TAG, "radio grp child 0 id " + radioGrp.getChildAt(0).getId());
-        radioGrp.check(radioGrp.getChildAt(0).getId());
+        RadioButton btm = (RadioButton) view.findViewById(R.id.gender_male);
+        RadioButton btfm = (RadioButton) view.findViewById(R.id.gender_female);
+        RadioButton btp = (RadioButton) view.findViewById(R.id.part_time);
+        RadioButton btf = (RadioButton) view.findViewById(R.id.full_time);
+
+        btm.setTag(Util.FILTER_GENDER_MALE);
+        btfm.setTag(Util.FILTER_GENDER_FEMALE);
+
+        btp.setTag(Util.MAID_ATTR_ISPART_TIME);
+        btf.setTag(Util.MAID_ATTR_FULL_TIME);
+
+        radioGrpGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int idd = group.getCheckedRadioButtonId();
+                Log.i(TAG, "onCheckedChanged checkedId " + checkedId);
+                Log.i(TAG, "onCheckedChanged checkedId " + group.getTag(checkedId));
+                Log.i(TAG, "onCheckedChanged checkedId " + group.getChildAt(1).getTag());
+                Log.i(TAG, "onCheckedChanged checkedId " + group.getChildAt(0).getId());
+                Log.i(TAG, "onCheckedChanged checkedId " + group.getChildAt(1).getId());
+            }
+        });
+
+        radioGrpPartTime.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int idd = group.getCheckedRadioButtonId();
+                Log.i(TAG, "onCheckedChanged checkedId " + checkedId);
+                Log.i(TAG, "onCheckedChanged checkedId " + group.getTag(checkedId));
+                Log.i(TAG, "onCheckedChanged checkedId " + group.getChildAt(0).getTag());
+                Log.i(TAG, "onCheckedChanged checkedId " + group.getChildAt(1).getTag());
+                Log.i(TAG, "onCheckedChanged checkedId " + group.getChildAt(0).getId());
+                Log.i(TAG, "onCheckedChanged checkedId " + group.getChildAt(1).getId());
+            }
+        });
+
+        salaryFrom.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().trim().length() > 0) {
+                    FilterData.getInstance().salaryFrom = Long.valueOf(s.toString().trim());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        salaryTo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().trim().length() > 0) {
+                    FilterData.getInstance().salaryTo = Long.valueOf(s.toString().trim());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        timeFrom.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(getActivity(),
+                        timePickerListenerFrom, 0, 0, false).show();
+            }
+        });
+
+        timeTo.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(getActivity(),
+                        timePickerListenerTo, 0, 0, false).show();
+            }
+        });
+
+        Log.i(TAG, "radio grp child 0 id " + radioGrpGender.getChildAt(0).getId());
+        radioGrpGender.check(radioGrpGender.getChildAt(0).getId());
+        radioGrpPartTime.check(radioGrpPartTime.getChildAt(0).getId());
 
         LinearLayout servicesLayout = (LinearLayout) view.findViewById(R.id.maid_services);
 
@@ -122,38 +220,6 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
             });
             servicesLayout.addView(v, params);
         }
-
-
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    FilterData.getInstance().isPartTime = true;
-                } else {
-                    FilterData.getInstance().isPartTime = false;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        // Spinner Drop down elements
-        List<String> categories = new ArrayList<String>();
-        categories.add("Parttime");
-        categories.add("Fulltime");
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_spinner_item, categories);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
 
         return view;
     }
@@ -193,7 +259,7 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
     public void onPause() {
         Log.i(TAG, "onPause called ");
 
-        int idd = radioGrp.getCheckedRadioButtonId();
+        /*int idd = radioGrp.getCheckedRadioButtonId();
         Log.i(TAG, "onPause radio button id " + idd);
         Log.i(TAG, "onPause radio button one " + R.id.gender_female);
         Log.i(TAG, "onPause radio button one " + R.id.gender_male);
@@ -202,7 +268,7 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
         long salFrom = salf.length() > 0 ? Long.valueOf(salf) : 0;
         long salTo = salt.length() > 0 ? Long.valueOf(salt) : 2000;
         FilterData.getInstance().salaryFrom = salFrom;
-        FilterData.getInstance().salaryTo = salTo;
+        FilterData.getInstance().salaryTo = salTo;*/
 
         super.onPause();
     }
@@ -249,6 +315,41 @@ public class NavigationDrawerFragment extends Fragment implements AbsListView.On
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
+    }
+
+    private TimePickerDialog.OnTimeSetListener timePickerListenerFrom =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int selectedHour,
+                                      int selectedMinute) {
+                    int hour = selectedHour;
+                    int minute = selectedMinute;
+                    FilterData.getInstance().timeFrom = new StringBuilder().append(pad(hour))
+                            .append(":").append(pad(minute)).toString();
+
+                    timeFrom.setText(new StringBuilder().append(pad(hour))
+                            .append(":").append(pad(minute)));
+                }
+            };
+
+    private TimePickerDialog.OnTimeSetListener timePickerListenerTo =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int selectedHour,
+                                      int selectedMinute) {
+                    int hour = selectedHour;
+                    int minute = selectedMinute;
+                    FilterData.getInstance().timeTo = new StringBuilder().append(pad(hour))
+                            .append(":").append(pad(minute)).toString();
+
+                    timeTo.setText(new StringBuilder().append(pad(hour))
+                            .append(":").append(pad(minute)));
+                }
+            };
+
+    private static String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
     }
 
 }
