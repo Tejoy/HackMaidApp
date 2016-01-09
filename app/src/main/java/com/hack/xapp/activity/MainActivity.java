@@ -325,9 +325,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                     startActivity(a);
                     break;
                 case 4:
-                    //Unregister case
-                    /*a = new Intent(getBaseContext(), History.class);
-                    startActivity(a);*/
+                    break;
+                case 5:
+
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                    try {
+                        startActivityForResult(builder.build(getApplicationContext()), PLACE_PICKER_REQUEST);
+                    } catch (Exception e) {
+                    }
                     break;
 
             }

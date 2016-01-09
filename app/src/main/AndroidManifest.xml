@@ -56,6 +56,11 @@
             </intent-filter>-->
         </activity>
         <activity
+            android:name=".activity.ListDialog"
+            android:theme="@style/MainActivityTheme"
+            android:screenOrientation="portrait"
+            android:label="Service List"></activity>
+        <activity
             android:name=".activity.RegisterMaid"
             android:label="Register maid"
             android:screenOrientation="portrait"
